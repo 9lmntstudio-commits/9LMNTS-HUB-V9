@@ -1,0 +1,41 @@
+# Python and automation files (development only)
+ai-agents/
+automation/
+*.py
+*.pyc
+__pycache__/
+
+# Local environment files
+.env
+.env.local
+.env.development
+
+# Development logs and temp files
+*.log
+logs/
+*.tmp
+*.cache
+
+# Node modules (will be installed during build)
+node_modules/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Documentation files (not needed for deployment)
+docs/
+*.md
+!README.md

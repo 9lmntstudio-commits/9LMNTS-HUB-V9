@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Romeo & Juliet | The Union</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- WEDDING LUXURY THEME (LIGHT DEFAULT) --- */
+        :root { 
+            --bg-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            --bg-color: #f4f1ea;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --gold: #D4AF37; 
+            --accent-dark: #8E793E;
+            --text-main: #333333; 
+            --text-sub: #666666;
+            --soft-gray: #f9f9f9;
+            --border: #eee;
+            --font-main: 'Playfair Display', serif; 
+            --font-ui: 'Helvetica Neue', sans-serif;
+        }
+
+        /* --- DARK MODE OVERRIDES --- */
+        [data-theme="dark"] {
+            --bg-image: none;
+            --bg-color: #121212;
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text-main: #e0e0e0;
+            --text-sub: #aaaaaa;
+            --soft-gray: #2c2c2c;
+            --border: #444;
+        }
+
+        body { 
+            background-color: var(--bg-color);
+            background-image: var(--bg-image);
+            color: var(--text-main); 
+            font-family: var(--font-main); 
+            margin: 0; 
+            padding-bottom: 140px; 
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        .app-container { 
+            max-width: 480px; 
+            margin: 0 auto; 
+            min-height: 100vh; 
+            background: var(--card-bg); 
+            border-left: 1px solid rgba(212, 175, 55, 0.2); 
+            border-right: 1px solid rgba(212, 175, 55, 0.2); 
+            position: relative; 
+            box-shadow: 0 0 30px rgba(0,0,0,0.05); 
+            backdrop-filter: blur(5px);
+            transition: background 0.3s;
+        }
+        
+        /* HEADER */
+        header { 
+            text-align: center; padding: 25px 20px; 
+            border-bottom: 1px solid var(--border); 
+            background: var(--card-bg); 
+            position: sticky; top: 0; z-index: 90; 
+            display: flex; justify-content: center; align-items: center; position: relative;
+        }
+        .logo { font-size: 1.8rem; letter-spacing: 3px; color: var(--gold); font-weight: bold; }
+        .date { font-family: var(--font-ui); font-size: 0.7rem; letter-spacing: 2px; color: var(--text-sub); margin-top: 5px; text-transform: uppercase; }
+        
+        /* DARK MODE TOGGLE */
+        .theme-toggle {
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            background: transparent; border: 1px solid var(--gold); color: var(--gold);
+            width: 35px; height: 35px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 1rem;
+            transition: 0.3s;
+        }
+        .theme-toggle:hover { background: var(--gold); color: white; }
+
+        /* --- UPDATED HERO BOOKING SECTION --- */
+        .hero-booking {
+            padding: 60px 25px;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid var(--border);
+            /* Hero Image with Soft Gradient Overlay */
+            background: 
+                linear-gradient(to bottom, rgba(244, 241, 234, 0.3), rgba(244, 241, 234, 1)), 
+                url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center 20%;
+        }
+
+        /* Dark mode adjustment for hero gradient */
+        [data-theme="dark"] .hero-booking { 
+             background: 
+                linear-gradient(to bottom, rgba(18, 18, 18, 0.4), rgba(18, 18, 18, 1)), 
+                url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center 20%;
+        }
+
+        .hero-booking h1 { 
+            margin: 0; font-size: 2.5rem; color: var(--accent-dark); 
+            line-height: 1.1; font-style: italic; 
+            text-shadow: 0 2px 10px rgba(255,255,255,0.8);
+        }
+        [data-theme="dark"] .hero-booking h1 { 
+            color: var(--gold); 
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .hero-booking .sub-title {
+            font-family: var(--font-ui); font-size: 0.8rem; 
+            letter-spacing: 3px; text-transform: uppercase; 
+            color: var(--text-main); margin-bottom: 10px; font-weight: bold;
+        }
+
+        .hero-booking p { 
+            font-family: var(--font-ui); font-size: 0.9rem; color: var(--text-main); 
+            margin: 15px 0 25px; font-weight: 500;
+        }
+        
+        .booking-btn {
+            background: var(--gold); color: white; border: none; padding: 15px 35px; 
+            font-family: var(--font-ui); font-weight: bold; font-size: 0.9rem; 
+            letter-spacing: 2px; cursor: pointer; border-radius: 2px; 
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3); transition: 0.3s;
+        }
+        .booking-btn:hover { transform: translateY(-2px); background: var(--accent-dark); }
+
+
+        /* TABS */
+        .nav-tabs { display: flex; gap: 10px; margin: 20px 0; padding: 0 15px 15px; border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; }
+        .tab { 
+            font-family: var(--font-ui); font-size: 0.75rem; font-weight: bold; 
+            text-transform: uppercase; letter-spacing: 1px; color: var(--text-sub); 
+            cursor: pointer; padding: 10px 15px; border: 1px solid var(--border); border-radius: 20px; white-space: nowrap;
+            transition: 0.3s; flex-shrink: 0;
+        }
+        .tab.active { color: white; background: var(--gold); border-color: var(--gold); }
+
+        /* SECTIONS & CARDS */
+        .game-section { display: none; padding: 20px; animation: fadeIn 0.5s ease; }
+        .game-section.active-section { display: block; }
+        .section-title { text-align: center; font-size: 1.5rem; color: var(--accent-dark); margin-bottom: 25px; }
+        [data-theme="dark"] .section-title { color: var(--gold); }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border); padding: 20px 10px; text-align: center; border-radius: 8px; border-top: 3px solid var(--gold); }
+        .avatar { width: 90px; height: 90px; background-size: cover; background-position: center; margin: 0 auto 15px; border-radius: 50%; border: 3px solid var(--soft-gray); }
+        .role { font-family: var(--font-ui); font-size: 0.6rem; letter-spacing: 1px; color: var(--text-sub); text-transform: uppercase; margin-bottom: 5px; }
+        h3 { margin: 0; font-size: 1.1rem; color: var(--text-main); }
+
+        .btn-action { width: 100%; padding: 12px; margin-top: 15px; background: transparent; border: 1px solid var(--gold); color: var(--gold); font-family: var(--font-ui); font-size: 0.7rem; font-weight: bold; letter-spacing: 1px; cursor: pointer; transition: 0.3s; }
+        .btn-action:hover { background: var(--gold); color: white; }
+        .btn-gold-filled { background: var(--gold); color: white; }
+
+        /* RAFFLE */
+        .raffle-box { background: rgba(212, 175, 55, 0.1); border: 2px dashed var(--gold); padding: 25px; text-align: center; margin-bottom: 20px; }
+        .raffle-prize { font-size: 1.2rem; font-weight: bold; color: var(--accent-dark); margin: 10px 0; }
+        [data-theme="dark"] .raffle-prize { color: var(--gold); }
+
+        /* FAMILY POST */
+        .family-section { margin: 40px 20px 40px; padding: 30px 20px; background: var(--soft-gray); text-align: center; border-radius: 8px; border-top: 1px solid var(--border); }
+        .photo-upload-sim { width: 100%; height: 150px; background: rgba(0,0,0,0.05); border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; color: #999; font-family: var(--font-ui); font-size: 0.8rem; margin-bottom: 15px; cursor: pointer; }
+        textarea { width: 100%; border: 1px solid var(--border); padding: 15px; font-family: var(--font-ui); box-sizing: border-box; resize: none; margin-bottom: 10px; background: var(--card-bg); color: var(--text-main); }
+
+        /* WHO'S HERE GRID */
+        .network-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .profile-card { background: var(--card-bg); padding: 20px; border-radius: 8px; text-align: center; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; border-top: 3px solid var(--gold); }
+        .profile-pic { width: 60px; height: 60px; background: var(--soft-gray); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #aaa; border: 1px solid var(--border); }
+        .profile-name { font-weight: bold; color: var(--text-main); margin-bottom: 5px; font-size: 0.9rem; }
+        .profile-role { font-size: 0.7rem; color: var(--text-sub); text-transform: uppercase; }
+        .connect-btn-small { margin-top: 10px; padding: 5px 15px; border: 1px solid var(--gold); color: var(--gold); background: transparent; font-size: 0.7rem; border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .connect-btn-small:hover { background: var(--gold); color: white; }
+
+        /* FOOTER */
+        .bar-menu { position: fixed; bottom: 0; left: 0; width: 100%; display: flex; z-index: 100; max-width: 480px; margin: 0 auto; left: 0; right: 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+        .menu-btn { flex: 1; padding: 15px; background: var(--card-bg); color: var(--text-main); border: none; font-family: var(--font-ui); font-size: 0.7rem; font-weight: bold; cursor: pointer; border-right: 1px solid var(--border); border-top: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 5px;}
+        .menu-btn i { font-size: 1.2rem; color: var(--gold); }
+        .menu-btn.featured { background: var(--gold); color: white; border-top-color: var(--gold); }
+        .menu-btn.featured i { color: white; }
+
+        /* MODAL */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(51, 51, 51, 0.95); z-index: 200; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-box { width: 85%; max-width: 380px; background: var(--card-bg); padding: 35px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border-radius: 2px; position: relative; border-top: 5px solid var(--gold); }
+        .close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--text-sub); }
+        
+        select, input { width: 100%; padding: 15px; border: 1px solid var(--border); margin-bottom: 15px; font-family: var(--font-ui); box-sizing: border-box; background: var(--soft-gray); color: var(--text-main); }
+        .submit { width: 100%; padding: 15px; background: var(--gold); color: white; border: none; font-family: var(--font-ui); font-weight: bold; cursor: pointer; border-radius: 2px; letter-spacing: 1px; }
+
+        /* PROFILE MODAL STYLE */
+        .profile-header-lg { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+        .avatar-lg { width: 90px; height: 90px; background: var(--soft-gray); border-radius: 50%; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #aaa; border: 2px solid var(--border); }
+        .connect-btn-lg { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2); transition: 0.3s; }
+        .connect-btn-lg:hover { background: var(--gold); color: white; }
+        .connect-btn-lg.connected { background: var(--gold); color: white; box-shadow: none; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <header>
+        <div>
+            <div class="logo">R & J</div>
+            <div class="date">CELEBRATION INVITE</div>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <i class="fas fa-moon"></i>
+        </button>
+    </header>
+
+    <!-- UPDATED HERO BOOKING -->
+    <div class="hero-booking">
+        <div class="sub-title">Wedding Celebration</div>
+        <h1>Romeo & Juliet</h1>
+        <p>Join us in building our new life together.</p>
+        <button class="booking-btn" onclick="openModal('fundModal')">CONTRIBUTE TO FUTURE</button>
+    </div>
+
+    <!-- FUNCTIONAL TABS -->
+    <div class="nav-tabs">
+        <div class="tab active" onclick="switchTab('dance', this)">🕺 Dance Off</div>
+        <div class="tab" onclick="switchTab('speech', this)">🎤 Speeches</div>
+        <div class="tab" onclick="switchTab('shoe', this)">👠 Shoe Game</div>
+        <div class="tab" onclick="switchTab('raffle', this)">🎟️ Raffle</div>
+        <div class="tab" onclick="switchTab('people', this)">👥 Who's Here</div>
+    </div>
+
+    <!-- GAME 1: DANCE OFF -->
+    <div id="dance" class="game-section active-section">
+        <div class="section-title">Battle of the Parties</div>
+        <div class="grid">
+            <div class="card">
+                <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=300&q=80');"></div>
+                <div class="role">TEAM GROOM</div>
+                <h3>The Groomsmen</h3>
+                <button class="btn-action" onclick="openVoteModal('THE GROOMSMEN')">VOTE ENERGY</button>
+            </div>
+            <div class="card">
+                <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1595156820235-9fa6b9777993?auto=format&fit=crop&w=300&q=80');"></div>
+                <div class="role">TEAM BRIDE</div>
+                <h3>The Bridesmaids</h3>
+                <button class="btn-action" onclick="openVoteModal('THE BRIDESMAIDS')">VOTE STYLE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME 2: SPEECHES -->
+    <div id="speech" class="game-section">
+        <div class="section-title">Speech Showcase</div>
+        <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:20px;">Toast the speakers with a drink.</p>
+        <div class="grid">
+            <div class="card" style="border-top-color: var(--accent-dark);">
+                <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80');"></div>
+                <div class="role">BEST MAN</div>
+                <h3>Mercutio</h3>
+                <button class="btn-action btn-gold-filled" onclick="openTipModal('Mercutio')">🍺 TIP SPEECH ($5)</button>
+            </div>
+            <div class="card" style="border-top-color: var(--accent-dark);">
+                <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80');"></div>
+                <div class="role">MAID OF HONOR</div>
+                <h3>Nurse</h3>
+                <button class="btn-action btn-gold-filled" onclick="openTipModal('The Nurse')">🥂 TIP SPEECH ($5)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME 3: SHOE GAME -->
+    <div id="shoe" class="game-section">
+        <div class="section-title">The Shoe Game</div>
+        <div class="card" style="max-width:300px; margin:0 auto;">
+            <h3 style="color:var(--accent-dark);">Q: Who made the first move?</h3>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn-action" onclick="alert('Voted Romeo!')">ROMEO 🙋‍♂️</button>
+                <button class="btn-action" onclick="alert('Voted Juliet!')">JULIET 🙋‍♀️</button>
+            </div>
+            <p style="font-size:0.7rem; color:var(--text-sub); margin-top:15px;">Next question loading...</p>
+        </div>
+    </div>
+
+    <!-- GAME 4: RAFFLE -->
+    <div id="raffle" class="game-section">
+        <div class="section-title">Honeymoon Raffle</div>
+        <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:20px;">Support the honeymoon fund.</p>
+        <div class="raffle-box">
+            <div class="role">GRAND PRIZE</div>
+            <div class="raffle-prize">Weekend Spa Getaway</div>
+            <p style="font-size:0.8rem; color:var(--text-main);">Value: $750</p>
+        </div>
+        <button class="booking-btn" style="width:100%;" onclick="openModal('raffleModal')">BUY TICKETS 🎟️</button>
+    </div>
+
+    <!-- SECTION 5: WHO'S HERE -->
+    <div id="people" class="game-section">
+        <div class="section-title">Guest Directory</div>
+        <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:20px;">Find family and friends.</p>
+        <div class="network-grid">
+            <div class="profile-card" onclick="openProfile('Lord Montague', 'Father of Groom', 'Always peaceful.')">
+                <div class="profile-pic"><i class="fas fa-user"></i></div>
+                <div class="profile-name">Montague</div>
+                <div class="profile-role">Father of Groom</div>
+                <button class="connect-btn-small">View Profile</button>
+            </div>
+            <div class="profile-card" onclick="openProfile('Lady Capulet', 'Mother of Bride', 'Loves a good party.')">
+                <div class="profile-pic"><i class="fas fa-user"></i></div>
+                <div class="profile-name">L. Capulet</div>
+                <div class="profile-role">Mother of Bride</div>
+                <button class="connect-btn-small">View Profile</button>
+            </div>
+            <div class="profile-card" onclick="openProfile('Benvolio', 'Cousin', 'Peacemaker.')">
+                <div class="profile-pic"><i class="fas fa-user"></i></div>
+                <div class="profile-name">Benvolio</div>
+                <div class="profile-role">Cousin</div>
+                <button class="connect-btn-small">View Profile</button>
+            </div>
+            <div class="profile-card" onclick="openProfile('Tybalt', 'Cousin', 'Fiery temper.')">
+                <div class="profile-pic"><i class="fas fa-user"></i></div>
+                <div class="profile-name">Tybalt</div>
+                <div class="profile-role">Cousin</div>
+                <button class="connect-btn-small">View Profile</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAMILY POST -->
+    <div class="family-section">
+        <h3 style="margin-top:0; color: var(--accent-dark);">Digital Guestbook</h3>
+        <p style="font-family:var(--font-ui); font-size:0.8rem; color:var(--text-sub); margin-bottom:20px;">Snap a photo for the couple.</p>
+        <div class="photo-upload-sim" onclick="alert('Opening Camera...')">
+            <i class="fas fa-camera" style="margin-right:10px;"></i> TAP TO ADD PHOTO
+        </div>
+        <textarea rows="3" placeholder="Leave a note..."></textarea>
+        <button class="submit" onclick="alert('Posted to Guestbook!')">POST MESSAGE</button>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="bar-menu">
+        <button class="menu-btn" onclick="alert('Opening Schedule...')"><i class="far fa-calendar-alt"></i> Schedule</button>
+        <button class="menu-btn" onclick="openTipModal('The DJ')"><i class="fas fa-music"></i> Tip DJ</button>
+        <button class="menu-btn" onclick="openModal('drinkModal')"><i class="fas fa-glass-cheers"></i> Buy Shot</button>
+        <button class="menu-btn featured" onclick="openModal('fundModal')"><i class="fas fa-gift"></i> Registry</button>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div id="voteModal" class="modal"><div class="modal-box"><span class="close" onclick="closeModal('voteModal')">&times;</span><h3>Cast Your Vote</h3><p style="font-family:var(--font-ui); font-size:0.8rem; color:var(--text-sub);">Voting for: <strong id="voteTarget">TEAM</strong></p><button class="submit" onclick="process('voteModal', 'Vote Submitted!')">SUBMIT VOTE</button></div></div>
+<div id="tipModal" class="modal"><div class="modal-box"><span class="close" onclick="closeModal('tipModal')">&times;</span><h3>Send a Tip</h3><p style="font-family:var(--font-ui); font-size:0.8rem; color:var(--text-sub);">Sending $5 to: <strong id="tipTarget">Person</strong></p><button class="submit" onclick="process('tipModal', '$5 Sent!')">SEND $5 TIP</button></div></div>
+<div id="drinkModal" class="modal"><div class="modal-box"><span class="close" onclick="closeModal('drinkModal')">&times;</span><h3>Buy a Round</h3><p style="font-family:var(--font-ui); font-size:0.8rem; color:var(--text-sub);">Send $15 for drinks.</p><button class="submit" onclick="process('drinkModal', 'Cheers! $15 Sent.')">PAY $15</button></div></div>
+<div id="fundModal" class="modal"><div class="modal-box"><span class="close" onclick="closeModal('fundModal')">&times;</span><h3>Contribute</h3><p style="font-family:var(--font-ui); font-size:0.8rem; color:var(--text-sub);">Select contribution amount.</p><select style="margin-top:15px;"><option>Date Night ($50)</option><option>Honeymoon ($100)</option><option>House Fund ($250)</option></select><input type="email" placeholder="Your Email"><button class="submit" onclick="process('fundModal', 'Thank you!')">CONTRIBUTE</button></div></div>
+<div id="raffleModal" class="modal"><div class="modal-box"><span class="close" onclick="closeModal('raffleModal')">&times;</span><h3>Raffle Tickets</h3><p style="font-family:var(--font-ui); font-size:0.8rem; color:var(--text-sub);">Support the couple.</p><select style="margin-top:15px;"><option>1 Ticket ($10)</option><option>3 Tickets ($25)</option></select><button class="submit" onclick="process('raffleModal', 'Good luck!')">BUY TICKETS</button></div></div>
+
+<!-- PROFILE MODAL -->
+<div id="profileModal" class="modal">
+    <div class="modal-box">
+        <span class="close" onclick="closeModal('profileModal')">&times;</span>
+        <div class="profile-header-lg">
+            <div class="avatar-lg"><i class="fas fa-user"></i></div>
+            <h2 id="pName" style="margin:0; color:var(--text-main);">Name</h2>
+            <p id="pRole" style="margin:5px 0 20px; color:var(--text-sub); font-size:0.9rem;">Role</p>
+        </div>
+        <p id="pFunFact" style="font-style:italic; color:var(--text-main); margin-bottom:20px;">"Fun Fact..."</p>
+        <button class="connect-btn-lg" onclick="toggleConnect(this)">👋 WAVE HELLO</button>
+    </div>
+</div>
+
+<script>
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.querySelector('.theme-toggle i');
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+    }
+
+    function switchTab(gameId, tabEl) {
+        document.querySelectorAll('.game-section').forEach(s => s.classList.remove('active-section'));
+        document.querySelectorAll('.nav-tabs .tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(gameId).classList.add('active-section');
+        tabEl.classList.add('active');
+    }
+
+    function openProfile(name, role, fact) {
+        document.getElementById('pName').innerText = name;
+        document.getElementById('pRole').innerText = role;
+        document.getElementById('pFunFact').innerText = '"' + fact + '"';
+        let btn = document.querySelector('.connect-btn-lg');
+        btn.innerText = "👋 WAVE HELLO";
+        btn.classList.remove('connected');
+        document.getElementById('profileModal').style.display = 'flex';
+    }
+
+    function toggleConnect(btn) {
+        if(btn.innerText.includes("WAVE")) {
+            btn.innerText = "✓ SENT!";
+            btn.classList.add('connected');
+        } else {
+            btn.innerText = "👋 WAVE HELLO";
+            btn.classList.remove('connected');
+        }
+    }
+
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function openVoteModal(target) { document.getElementById('voteTarget').innerText = target; openModal('voteModal'); }
+    function openTipModal(target) { document.getElementById('tipTarget').innerText = target; openModal('tipModal'); }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    function process(modalId, msg) { 
+        let btn = document.querySelector(`#${modalId} .submit`);
+        let oldText = btn.innerText;
+        btn.innerText = "PROCESSING...";
+        setTimeout(() => { alert(msg); closeModal(modalId); btn.innerText = oldText; }, 1000);
+    }
+</script>
+</body>
+</html>

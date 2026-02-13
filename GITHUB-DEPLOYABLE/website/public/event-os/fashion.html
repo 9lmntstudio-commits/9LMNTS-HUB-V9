@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>👠 LIVE: RUNWAY OS - Fashion Week Live</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Helvetica:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- RUNWAY OS VARIABLES (Fashion Editorial) --- */
+        :root {
+            --bg-color: #000000;               /* Absolute Black */
+            --card-bg: #121212;                /* Very dark grey */
+            --modal-bg: #121212;
+            --primary: #ffffff;                /* Stark White */
+            --accent: #ccff00;                 /* Electric Lime */
+            --secondary: #ff3366;              /* Fashion Pink for hearts */
+            --gold: #d4af37;                   /* Luxury gold */
+            --text-main: #ffffff;      
+            --text-sub: #aaaaaa;       
+            --border: rgba(255, 255, 255, 0.2); /* Minimalist white border */
+            --input-bg: #1a1a1a;
+            --success: #ccff00;
+            --live-pulse: #ff3366;
+            
+            --font-head: 'Cormorant Garamond', serif; /* Editorial font */
+            --font-body: 'Helvetica', sans-serif;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body { 
+            background-color: var(--bg-color);
+            color: var(--text-main); 
+            font-family: var(--font-body); 
+            margin: 0; padding-bottom: 90px;
+            transition: background 0.3s;
+            overflow-x: hidden;
+            letter-spacing: 0.02em;
+        }
+        
+        .app-container { 
+            max-width: 480px; margin: 0 auto; min-height: 100vh; 
+            background: var(--bg-color); 
+            position: relative; overflow-x: hidden;
+        }
+        
+        /* FASHION WEEK HEADER */
+        .live-event-header { 
+            background: linear-gradient(90deg, #121212 0%, #000000 100%);
+            padding: 12px 20px; 
+            position: sticky; top: 0; z-index: 100; 
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo { 
+            font-family: var(--font-head); 
+            font-size: 1.8rem; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            color: white; 
+            font-weight: 700;
+        }
+        .logo span { color: var(--accent); }
+        
+        .live-status {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .live-badge { 
+            background: transparent;
+            color: var(--accent); 
+            font-size: 0.7rem; 
+            font-weight: 700; 
+            padding: 6px 12px; 
+            border-radius: 0; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            text-transform: uppercase;
+            border: 1px solid var(--accent);
+            letter-spacing: 1.5px;
+        }
+        
+        .live-timer {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: transparent;
+            padding: 4px 10px;
+            border-radius: 0;
+            border: 1px solid var(--border);
+            letter-spacing: 1px;
+        }
+
+        /* FASHION ANNOUNCEMENT TICKER */
+        .announcement-ticker {
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid var(--border);
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        .ticker-content {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding-left: 100%;
+            letter-spacing: 1px;
+        }
+        .ticker-content i { margin: 0 10px; color: var(--primary); }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* 1. HERO DASHBOARD - FASHION VERSION */
+        .hero-dashboard-live {
+            background: #000000;
+            padding: 30px 20px 25px; 
+            text-align: center; 
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+        .hero-dashboard-live::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+        
+        .hero-title { 
+            font-family: var(--font-head); 
+            margin: 0; 
+            font-size: 3.5rem; 
+            line-height: 0.85; 
+            color: white; 
+            text-transform: uppercase; 
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+        .hero-sub { 
+            color: var(--accent); 
+            font-weight: 700; 
+            letter-spacing: 4px; 
+            font-size: 0.75rem; 
+            margin: 12px 0 25px; 
+            text-transform: uppercase;
+        }
+        
+        .live-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0 20px;
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 0;
+            border: 1px solid var(--border);
+        }
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            display: block;
+            line-height: 1;
+            font-family: var(--font-head);
+        }
+        .stat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: var(--text-sub);
+            font-weight: 600;
+            margin-top: 5px;
+            display:block;
+            letter-spacing: 1px;
+        }
+        .stat-icon {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .main-cta-btn { 
+            width: 100%; 
+            padding: 18px; 
+            background: transparent;
+            color: var(--accent); 
+            border: 1px solid var(--accent); 
+            border-radius: 0; 
+            font-weight: 700; 
+            font-size: 0.9rem; 
+            margin: 15px 0 10px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            text-transform: uppercase;
+            font-family: var(--font-body);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1.5px;
+        }
+        .main-cta-btn:active { transform: scale(0.98); }
+        .main-cta-btn:hover { background: rgba(204, 255, 0, 0.1); }
+
+        /* FASHION TICKETS RACK - UPDATED */
+        .contribution-section {
+            padding: 20px 0 25px 20px; 
+            margin: 25px 20px; 
+            background: var(--card-bg); 
+            border-radius: 0;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        .section-header { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            color: white; 
+            font-weight: 700; 
+            font-size: 1rem; 
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-header i { color: var(--accent); font-size: 1.1rem; }
+        
+        .ticket-row { 
+            display: flex; 
+            gap: 12px; 
+            overflow-x: auto; 
+            padding-bottom: 5px; 
+            padding-right: 20px; 
+            scrollbar-width: none; 
+        }
+        .ticket-card {
+            min-width: 140px; 
+            padding: 18px 12px; 
+            border-radius: 0; 
+            border: 1px solid var(--border);
+            background: var(--bg-color); 
+            cursor: pointer; 
+            text-align: center; 
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .ticket-card:active { transform: scale(0.97); }
+        .ticket-card.vip { 
+            border: 1px solid var(--accent); 
+            background: transparent; 
+            position: relative;
+        }
+        .vip-badge {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: black;
+            font-size: 0.6rem;
+            font-weight: 900;
+            padding: 2px 10px;
+            border-radius: 0;
+        }
+        
+        .t-price { font-size: 1.6rem; font-weight: 700; color: white; margin-bottom: 5px; font-family: var(--font-head); }
+        .t-label { font-size: 0.75rem; color: var(--text-sub); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .t-btn { 
+            font-size: 0.8rem; 
+            font-weight: 700; 
+            padding: 10px 0; 
+            border-radius: 0; 
+            border: 1px solid var(--border); 
+            background: transparent; 
+            color: white; 
+            width: 100%; 
+            cursor: pointer; 
+            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .t-btn:hover { background: rgba(255,255,255,0.05); }
+        .vip .t-btn { background: transparent; color: var(--accent); border-color: var(--accent); }
+
+        /* TABS - FASHION VERSION */
+        .nav-tabs { 
+            display: flex; 
+            background: var(--card-bg); 
+            padding: 0 5px; 
+            border-bottom: 1px solid var(--border); 
+            overflow-x: auto;
+            position: sticky;
+            top: 73px;
+            z-index: 90;
+        }
+        .tab { 
+            padding: 18px 20px; 
+            color: var(--text-sub); 
+            font-weight: 700; 
+            font-size: 0.9rem; 
+            cursor: pointer; 
+            white-space: nowrap; 
+            border-bottom: 2px solid transparent; 
+            transition: 0.2s;
+            flex: 1;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tab.active { 
+            color: var(--accent); 
+            border-bottom: 2px solid var(--accent);
+        }
+        .tab-notification {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        /* SECTIONS */
+        .view-section { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* --- RUNWAY BATTLE ENGINE --- */
+        
+        /* Live Runway Battle */
+        .battle-header { 
+            text-align: center; 
+            margin-bottom: 20px; 
+            color: var(--accent); 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            font-weight: 700; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .live-indicator {
+            background: transparent;
+            color: var(--accent);
+            font-size: 0.6rem;
+            padding: 3px 8px;
+            border-radius: 0;
+            font-weight: 700;
+            border: 1px solid var(--accent);
+            letter-spacing: 1px;
+        }
+        
+        .battle-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-bottom: 25px; 
+        }
+        .battle-card { 
+            background: var(--card-bg); 
+            padding: 20px 15px; 
+            text-align: center; 
+            border-radius: 0; 
+            border: 1px solid var(--border); 
+            position: relative;
+            transition: 0.3s;
+        }
+        .battle-card:hover { transform: translateY(-3px); }
+        .bc-red { border-top: 2px solid #ff3366; }
+        .bc-blue { border-top: 2px solid #3366ff; }
+        
+        .vote-percentage {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            font-family: var(--font-head);
+        }
+        .bc-red .vote-percentage { color: #ff3366; }
+        .bc-blue .vote-percentage { color: #3366ff; }
+        
+        .bc-avatar { 
+            width: 80px; 
+            height: 80px; 
+            background-size: cover; 
+            margin: 0 auto 15px; 
+            border-radius: 0; 
+            border: 1px solid var(--border); 
+        }
+        .bc-name { 
+            font-family: var(--font-head); 
+            font-size: 1.6rem; 
+            line-height: 1; 
+            margin: 0; 
+            text-transform: uppercase; 
+            color: white;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .bc-role { 
+            font-size: 0.75rem; 
+            color: var(--text-sub); 
+            margin-bottom: 15px; 
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .vote-progress {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 0;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        .vote-fill {
+            height: 100%;
+            border-radius: 0;
+            transition: width 1s ease-out;
+        }
+        .bc-red .vote-fill { background: #ff3366; }
+        .bc-blue .vote-fill { background: #3366ff; }
+        
+        .bc-btn { 
+            width: 100%; 
+            padding: 12px; 
+            font-weight: 700; 
+            border: 1px solid var(--border); 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            border-radius: 0; 
+            font-size: 0.85rem; 
+            color: white; 
+            transition: 0.2s;
+            background: transparent;
+            letter-spacing: 1px;
+        }
+        .bc-btn:active { transform: scale(0.98); }
+        .btn-red { 
+            color: #ff3366;
+            border-color: #ff3366;
+        }
+        .btn-red:hover { background: rgba(255, 51, 102, 0.1); }
+        .btn-blue { 
+            color: #3366ff;
+            border-color: #3366ff;
+        }
+        .btn-blue:hover { background: rgba(51, 102, 255, 0.1); }
+
+        /* DESIGNERS Grid */
+        .grid-header { 
+            font-size: 1rem; 
+            font-weight: 700; 
+            color: white; 
+            margin: 30px 0 20px; 
+            border-bottom: 1px solid var(--border); 
+            padding-bottom: 12px; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .contestant-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+        }
+        
+        .c-card { 
+            background: var(--card-bg); 
+            padding: 15px; 
+            border-radius: 0; 
+            border: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+        }
+        .c-card:active { transform: scale(0.98); }
+        .c-card.active { border-color: var(--accent); background: rgba(204, 255, 0, 0.05); }
+        .c-img { 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 0; 
+            background-size: cover; 
+            background-color: #1a1a1a; 
+            border: 1px solid var(--border);
+        }
+        .c-info { flex: 1; }
+        .c-title { font-weight: 700; font-size: 0.9rem; line-height: 1.1; color: white; text-transform: uppercase; letter-spacing: 0.5px; }
+        .c-sub { font-size: 0.7rem; color: var(--text-sub); }
+        .c-vote-icon { 
+            color: var(--accent); 
+            font-size: 0.75rem; 
+            font-weight: 700;
+            border: 1px solid var(--accent); 
+            padding: 6px 12px; 
+            border-radius: 0; 
+            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .c-vote-icon:hover { background: var(--accent); color: black; }
+
+        /* SHOP THE LOOK GRID */
+        .network-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+        }
+        .profile-card-grid { 
+            background: var(--card-bg); 
+            padding: 20px 15px; 
+            border-radius: 0; 
+            text-align: center; 
+            border: 1px solid var(--border); 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .profile-card-grid:active { transform: scale(0.98); }
+        .pcg-avatar { 
+            width: 70px; 
+            height: 70px; 
+            background-color: var(--bg-color); 
+            border-radius: 0; 
+            margin: 0 auto 15px; 
+            background-size: cover; 
+            border: 1px solid var(--border); 
+            background-position: center;
+        }
+        .pcg-name { 
+            font-weight: 700; 
+            font-size: 1rem; 
+            margin-bottom: 5px; 
+            color: white; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .pcg-role { 
+            font-size: 0.75rem; 
+            color: var(--text-sub); 
+            text-transform: uppercase; 
+            margin-bottom: 20px; 
+            font-weight: 600; 
+            letter-spacing: 1px;
+        }
+        .pcg-btn { 
+            background: transparent; 
+            border: 1px solid var(--accent); 
+            color: var(--accent); 
+            padding: 10px 20px; 
+            border-radius: 0; 
+            font-size: 0.8rem; 
+            font-weight: 700; 
+            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .pcg-btn:hover { background: var(--accent); color: black; }
+
+        /* STYLE CRITIQUES SECTION */
+        .qa-card { 
+            background: var(--card-bg); 
+            padding: 18px; 
+            border-radius: 0; 
+            margin-bottom: 12px; 
+            border: 1px solid var(--border); 
+            display: flex; 
+            gap: 15px; 
+            transition: 0.2s;
+        }
+        .qa-card:active { transform: scale(0.99); }
+        .upvote-box { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-width: 45px; 
+            justify-content: center; 
+        }
+        .arrow { 
+            font-size: 1.4rem; 
+            color: var(--text-sub); 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .arrow:active { transform: scale(1.2); }
+        .arrow.active { color: var(--secondary); }
+        .count { 
+            font-weight: 700; 
+            font-size: 1rem; 
+            margin-top: 5px; 
+            color: white;
+        }
+
+        /* FOOTER NAV - FASHION */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            max-width: 480px; 
+            background: rgba(18, 18, 18, 0.95); 
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border); 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 15px 0; 
+            z-index: 100; 
+        }
+        .nav-item { 
+            text-align: center; 
+            color: var(--text-sub); 
+            font-size: 0.7rem; 
+            cursor: pointer; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 6px; 
+            font-weight: 700; 
+            position: relative;
+            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .nav-item:active { transform: scale(0.95); }
+        .nav-item.active { color: var(--accent); }
+        .nav-item i { font-size: 1.4rem; }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--secondary);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 900;
+            width: 18px;
+            height: 18px;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* QUICK ACTIONS FAB */
+        .quick-action-fab {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            font-size: 1.5rem;
+            cursor: pointer;
+            border: 1px solid var(--accent);
+            z-index: 99;
+            transition: 0.3s;
+        }
+        .quick-action-fab:active { 
+            transform: scale(0.9); 
+            background: rgba(204, 255, 0, 0.1);
+        }
+
+        /* --- MODALS --- */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            z-index: 200; 
+            justify-content: center; 
+            align-items: center; 
+            backdrop-filter: blur(10px); 
+        }
+        .modal-box { 
+            width: 90%; 
+            max-width: 400px; 
+            background: var(--modal-bg); 
+            padding: 0; 
+            border-radius: 0; 
+            position: relative; 
+            border: 1px solid var(--border); 
+            animation: slideUp 0.3s; 
+            overflow: hidden; 
+        }
+        
+        .m-header { 
+            padding: 25px 20px; 
+            border-bottom: 1px solid var(--border); 
+            position: relative; 
+            text-align: center; 
+            background: rgba(0,0,0,0.2);
+        }
+        .m-title { 
+            margin: 0; 
+            color: white; 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 2px;
+            font-family: var(--font-head);
+        }
+        .m-close { 
+            position: absolute; 
+            top: 20px; 
+            right: 25px; 
+            font-size: 2rem; 
+            color: var(--text-sub); 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        .m-close:active { transform: scale(1.2); }
+        .m-body { padding: 30px; }
+
+        /* VOTE MODAL */
+        .vote-tabs { 
+            display: flex; 
+            background: var(--bg-color); 
+            border-radius: 0;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+        .v-tab { 
+            flex: 1; 
+            padding: 18px; 
+            text-align: center; 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+            color: var(--text-sub); 
+            cursor: pointer; 
+            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .v-tab:active { transform: scale(0.98); }
+        .v-tab.active { 
+            color: var(--accent); 
+            background: rgba(204, 255, 0, 0.05);
+            border-bottom: 2px solid var(--accent); 
+        }
+        
+        .power-opt { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 20px; 
+            background: var(--bg-color); 
+            border: 1px solid var(--border); 
+            border-radius: 0; 
+            margin-bottom: 15px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+        }
+        .power-opt:active { transform: scale(0.98); }
+        .power-opt:hover, .power-opt.selected { 
+            border-color: var(--accent); 
+            background: rgba(204, 255, 0, 0.05); 
+        }
+
+        .submit-action { 
+            background: transparent; 
+            color: var(--accent); 
+            border: 1px solid var(--accent); 
+            padding: 18px; 
+            width: 100%; 
+            font-weight: 700; 
+            border-radius: 0; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            margin-top: 15px; 
+            font-size: 1rem;
+            transition: 0.2s;
+            letter-spacing: 1.5px;
+        }
+        .submit-action:active { transform: scale(0.98); }
+        .submit-action:hover { background: rgba(204, 255, 0, 0.1); }
+
+        /* DESIGNER PROFILE MODAL */
+        .profile-header-lg { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            margin-bottom: 25px; 
+        }
+        .avatar-lg { 
+            width: 110px; 
+            height: 110px; 
+            background: var(--bg-color); 
+            border-radius: 0; 
+            margin-bottom: 20px; 
+            background-size: cover; 
+            border: 1px solid var(--border); 
+        }
+        .goal-wrapper { 
+            width: 100%; 
+            margin: 25px 0 30px; 
+            text-align: left; 
+            background: var(--bg-color);
+            padding: 20px;
+            border-radius: 0;
+            border: 1px solid var(--border);
+        }
+        .goal-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+        }
+        .contribute-btn-mini { 
+            background: transparent; 
+            color: var(--accent); 
+            border: 1px solid var(--accent); 
+            padding: 8px 16px; 
+            border-radius: 0; 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .contribute-btn-mini:active { transform: scale(0.95); }
+        .goal-bar-bg { 
+            width: 100%; 
+            height: 12px; 
+            background: var(--border); 
+            border-radius: 0; 
+            overflow: hidden; 
+            margin-bottom: 10px; 
+        }
+        .goal-fill { 
+            height: 100%; 
+            background: var(--accent); 
+            width: 0%; 
+            transition: width 1s ease-out; 
+        }
+
+        /* AGENDA LIST */
+        .agenda-list { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+            text-align: left; 
+        }
+        .agenda-item { 
+            padding: 20px 0; 
+            border-bottom: 1px solid var(--border); 
+            color: white; 
+            display: flex; 
+            gap: 20px; 
+            align-items: flex-start;
+        }
+        .agenda-item.current {
+            background: rgba(204, 255, 0, 0.05);
+            border-left: 2px solid var(--accent);
+            margin-left: -30px;
+            padding-left: 25px;
+            border-radius: 0;
+        }
+        .agenda-time { 
+            font-weight: 700; 
+            color: var(--accent); 
+            white-space: nowrap; 
+            font-size: 1rem; 
+            min-width: 80px; 
+            font-family: var(--font-head);
+        }
+        .agenda-desc { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            flex: 1;
+        }
+        .current-session {
+            display: inline-block;
+            background: transparent;
+            color: var(--accent);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 0;
+            margin-left: 10px;
+            border: 1px solid var(--accent);
+            animation: pulse 2s infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* COMMENT TEXTAREA */
+        .ask-textarea {
+            width: 100%;
+            height: 120px;
+            background: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 0;
+            padding: 15px;
+            color: white;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            resize: none;
+        }
+
+        /* CONTRIBUTE MODAL */
+        .contribute-modal-content {
+            text-align: center;
+        }
+        .tier-option {
+            background: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 0;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .tier-option.selected {
+            border-color: var(--accent);
+            background: rgba(204, 255, 0, 0.05);
+        }
+        .tier-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-family: var(--font-head);
+        }
+
+        /* HEART ANIMATION */
+        .heart-animation {
+            position: absolute;
+            font-size: 2rem;
+            color: var(--secondary);
+            pointer-events: none;
+            z-index: 1000;
+            animation: floatUp 1.5s ease-out forwards;
+        }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes slideUp { 
+            from { transform: translateY(30px); opacity: 0; } 
+            to { transform: translateY(0); opacity: 1; } 
+        }
+        @keyframes pulse { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.6; } 
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+<div class="app-container">
+    <!-- FASHION WEEK HEADER -->
+    <div class="live-event-header">
+        <div class="logo">👠 FASHION <span>WEEK</span></div>
+        <div class="live-status">
+            <div class="live-timer" id="liveTimer">NEXT: 14:30</div>
+            <div class="live-badge"><i class="fas fa-circle"></i> LIVE NOW</div>
+        </div>
+    </div>
+
+    <!-- FASHION ANNOUNCEMENT TICKER -->
+    <div class="announcement-ticker">
+        <div class="ticker-content" id="announcementTicker">
+            <!-- Ticker content will be populated by JS -->
+        </div>
+    </div>
+
+    <!-- HERO DASHBOARD FASHION -->
+    <div class="hero-dashboard-live">
+        <div class="hero-sub">SPRING/SUMMER 2025 • NEW YORK</div>
+        <h1 class="hero-title">RUNWAY<br>BATTLE</h1>
+        
+        <div class="live-stats">
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-chair"></i></div>
+                <div class="stat-value" id="liveAudience">1,247</div>
+                <div class="stat-label">Front Row</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="stat-value" id="totalVotes">8,942</div>
+                <div class="stat-label">Trend Score</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-value" id="matchTimer">14:30</div>
+                <div class="stat-label">Next Collection</div>
+            </div>
+        </div>
+
+        <button class="main-cta-btn" onclick="openModal('contributeModal')">
+            <i class="fas fa-crown"></i> GET BACKSTAGE ACCESS
+        </button>
+    </div>
+
+    <!-- FASHION TICKETS RACK -->
+    <div class="contribution-section">
+        <div class="section-header">
+            <i class="fas fa-shopping-bag"></i> EXPERIENCE UPGRADES
+        </div>
+        <div class="ticket-row">
+            <div class="ticket-card" onclick="openTierSelection(20, 'Lookbook Access')">
+                <div class="t-price">$20</div>
+                <div class="t-label">Lookbook Access</div>
+                <button class="t-btn">VIEW</button>
+            </div>
+            <div class="ticket-card" onclick="openTierSelection(50, 'Trendsetter Pass')">
+                <div class="t-price">$50</div>
+                <div class="t-label">Trendsetter Pass</div>
+                <button class="t-btn">UPGRADE</button>
+            </div>
+            <div class="ticket-card vip" onclick="openTierSelection(250, 'Backstage Pass')">
+                <div class="vip-badge">VIP</div>
+                <div class="t-price">$250</div>
+                <div class="t-label">Backstage Pass</div>
+                <button class="t-btn">EXPERIENCE</button>
+            </div>
+            <div class="ticket-card" onclick="openTierSelection(10, 'Win a Look')">
+                <div class="t-price">$10</div>
+                <div class="t-label">Win a Look</div>
+                <button class="t-btn">ENTER</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAV TABS -->
+    <div class="nav-tabs">
+        <div class="tab active" onclick="switchTab('pitch', this)">
+            <i class="fas fa-walking"></i> THE RUNWAY
+            <div class="tab-notification" id="pitchNotification"></div>
+        </div>
+        <div class="tab" onclick="switchTab('network', this)">
+            <i class="fas fa-shopping-bag"></i> SHOP THE LOOK
+            <div class="tab-notification" id="networkNotification"></div>
+        </div>
+        <div class="tab" onclick="switchTab('qa', this)">
+            <i class="fas fa-comment-alt"></i> STYLE CRITIQUES
+            <div class="tab-notification" id="qaNotification"></div>
+        </div>
+    </div>
+
+    <!-- TAB 1: THE RUNWAY (Brand Battle) -->
+    <div id="pitch" class="view-section active">
+        <!-- Live Runway Battle -->
+        <div class="battle-header">
+            <div class="live-indicator">LIVE NOW</div>
+            <span id="currentMatch">NYC vs PARIS • 14:30</span>
+        </div>
+        <div class="battle-container">
+            <div class="battle-card bc-red">
+                <div class="vote-percentage" id="voteRed">48%</div>
+                <div class="bc-avatar" style="background-image: url('https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=300&auto=format&fit=crop');"></div>
+                <h3 class="bc-name">CHANEL</h3>
+                <div class="bc-role">Paris • Haute Couture</div>
+                <div class="vote-progress">
+                    <div class="vote-fill" id="progressRed" style="width: 48%"></div>
+                </div>
+                <button class="bc-btn btn-red" onclick="openVote('Chanel', 'Paris', 'CHANEL')">
+                    <i class="fas fa-heart"></i> LOVE THIS LOOK
+                </button>
+            </div>
+            <div class="battle-card bc-blue">
+                <div class="vote-percentage" id="voteBlue">52%</div>
+                <div class="bc-avatar" style="background-image: url('https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=300&auto=format&fit=crop');"></div>
+                <h3 class="bc-name">CALVIN KLEIN</h3>
+                <div class="bc-role">New York • Minimalist</div>
+                <div class="vote-progress">
+                    <div class="vote-fill" id="progressBlue" style="width: 52%"></div>
+                </div>
+                <button class="bc-btn btn-blue" onclick="openVote('Calvin Klein', 'NYC', 'CALVIN KLEIN')">
+                    <i class="fas fa-heart"></i> LOVE THIS LOOK
+                </button>
+            </div>
+        </div>
+
+        <!-- 8 Designers Grid -->
+        <div class="grid-header">
+            ALL DESIGNERS
+            <span style="font-size:0.8rem; color:var(--text-sub);">8 COLLECTIONS • $50K PRIZE</span>
+        </div>
+        <div class="contestant-grid" id="contestantGrid">
+            <!-- Designers populated by JS -->
+        </div>
+    </div>
+
+    <!-- TAB 2: SHOP THE LOOK (Marketplace) -->
+    <div id="network" class="view-section">
+        <div class="grid-header">
+            SHOP THE LOOK
+            <span style="font-size:0.8rem; color:var(--text-sub);" id="networkCount">124 ITEMS • 8 NEW</span>
+        </div>
+        <div class="network-grid" id="networkGrid">
+            <!-- Product cards populated by JS -->
+        </div>
+    </div>
+
+    <!-- TAB 3: STYLE CRITIQUES -->
+    <div id="qa" class="view-section">
+        <button class="main-cta-btn" style="margin-bottom:25px; padding:15px;" onclick="openModal('askModal')">
+            <i class="fas fa-plus"></i> LEAVE A COMMENT
+        </button>
+        
+        <div id="questionsContainer">
+            <!-- Comments populated by JS -->
+        </div>
+    </div>
+
+    <!-- QUICK ACTION FAB -->
+    <div class="quick-action-fab" onclick="openQuickActions()">
+        <i class="fas fa-eye"></i>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('pitch', this)">
+            <i class="fas fa-walking"></i>
+            RUNWAY
+            <div class="notification-badge" id="navBattleBadge">3</div>
+        </div>
+        <div class="nav-item" onclick="openModal('agendaModal')">
+            <i class="far fa-calendar-alt"></i>
+            SCHEDULE
+        </div>
+        <div class="nav-item" onclick="switchTab('network', this)">
+            <i class="fas fa-shopping-bag"></i>
+            SHOP
+            <div class="notification-badge" id="navNetworkBadge">8</div>
+        </div>
+        <div class="nav-item" onclick="openModal('profileModal')">
+            <i class="fas fa-user-circle"></i>
+            PROFILE
+        </div>
+    </div>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- VOTE MODAL -->
+<div id="voteModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">SHOW YOUR LOVE</div>
+            <div style="font-size:0.9rem; color:var(--text-sub); margin-top:8px;">
+                Voting for: <span id="voteTarget" style="color:var(--accent); font-weight:700; font-size:1.1rem;">DESIGNER</span>
+            </div>
+            <span class="m-close" onclick="closeModal('voteModal')">&times;</span>
+        </div>
+        <div class="vote-tabs">
+            <div class="v-tab active" onclick="switchVoteTab('free', this)">FREE VOTE</div>
+            <div class="v-tab" onclick="switchVoteTab('power', this)">INFLUENCE VOTE (+$)</div>
+        </div>
+        <div class="m-body">
+            <div id="freeVoteSection">
+                <p style="color:var(--text-sub); font-size:0.95rem; margin-bottom:25px; text-align:center;">
+                    Cast your single audience vote for this collection. One vote per person.
+                </p>
+                <button class="submit-action" style="border-color:var(--secondary); color:var(--secondary);" onclick="castFreeVote()">
+                    <i class="fas fa-heart"></i> SUBMIT FREE VOTE
+                </button>
+            </div>
+            <div id="powerVoteSection" style="display:none;">
+                <p style="color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">
+                    Boost your favorite designer with influence votes! Each purchase supports emerging talent.
+                </p>
+                <div class="power-opt" onclick="selectPowerOption(10, 2)">
+                    <span><strong>10 Influence Votes</strong><br><small>Basic Support</small></span>
+                    <span style="color:var(--accent); font-weight:700; font-size:1.1rem;">$2.00</span>
+                </div>
+                <div class="power-opt" onclick="selectPowerOption(50, 10)">
+                    <span><strong>50 Influence Votes</strong><br><small>Trendsetter</small></span>
+                    <span style="color:var(--accent); font-weight:700; font-size:1.1rem;">$10.00</span>
+                </div>
+                <div class="power-opt" onclick="selectPowerOption(250, 45)">
+                    <span><strong>250 Influence Votes</strong><br><small>Fashion Insider</small></span>
+                    <span style="color:var(--accent); font-weight:700; font-size:1.1rem;">$45.00</span>
+                </div>
+                <button class="submit-action" onclick="purchasePowerVotes()">
+                    <i class="fas fa-heart"></i> PAY & SUPPORT
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AGENDA MODAL -->
+<div id="agendaModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">FASHION WEEK SCHEDULE</div>
+            <span class="m-close" onclick="closeModal('agendaModal')">&times;</span>
+        </div>
+        <div class="m-body" style="padding:0 30px 30px;">
+            <ul class="agenda-list" id="agendaList">
+                <!-- Agenda populated by JS -->
+            </ul>
+            <button class="submit-action" style="margin-top:25px;" onclick="closeModal('agendaModal')">
+                CLOSE SCHEDULE
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- DESIGNER PROFILE MODAL -->
+<div id="profileModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">DESIGNER PROFILE</div>
+            <span class="m-close" onclick="closeModal('profileModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <div class="profile-header-lg">
+                <div id="pAvatar" class="avatar-lg"></div>
+                <h2 id="pName" style="margin:0; font-size:1.5rem; color:white;">Designer Name</h2>
+                <p id="pRole" style="color:var(--text-sub); margin:8px 0 0; font-size:0.9rem;">Fashion House • Location</p>
+                <div style="margin-top:10px;">
+                    <span style="border:1px solid var(--accent); color:var(--accent); padding:4px 12px; font-size:0.7rem; font-weight:700;">
+                        <i class="fas fa-circle"></i> SHOWING NOW
+                    </span>
+                </div>
+            </div>
+            <div class="goal-wrapper">
+                <div class="goal-header">
+                    <span class="goal-title" style="font-weight:700; color:white;">Collection Funding Goal</span>
+                    <button class="contribute-btn-mini" onclick="openContributeModal()">
+                        <i class="fas fa-hand-holding-heart"></i> SUPPORT
+                    </button>
+                </div>
+                <div class="goal-bar-bg">
+                    <div id="pGoalFill" class="goal-fill"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-sub); margin-top:5px;">
+                    <span>Raised: <strong style="color:var(--accent);" id="raisedAmount">$42,850</strong></span>
+                    <span>Target: <strong>$50,000</strong></span>
+                </div>
+            </div>
+            <div style="margin-bottom:25px;">
+                <h3 style="color:white; font-size:1rem; margin-bottom:10px;">DESIGNER BIO</h3>
+                <p style="color:var(--text-sub); font-size:0.9rem; line-height:1.5;">
+                    <span id="designerBio">A visionary in contemporary fashion, blending traditional craftsmanship with avant-garde silhouettes. This collection explores the intersection of sustainable materials and luxury.</span>
+                </p>
+            </div>
+            <button class="submit-action" id="connectButton" onclick="toggleConnect()" style="margin-bottom:15px;">
+                <i class="fas fa-heart"></i> FOLLOW DESIGNER
+            </button>
+            <div style="text-align:center; font-size:0.9rem; color:var(--accent); font-weight:700; cursor:pointer; padding:12px; border:1px solid var(--border); border-radius:0;" 
+                 onclick="viewFullCollection()">
+                <i class="fas fa-arrow-right"></i> VIEW FULL COLLECTION
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CONTRIBUTE MODAL -->
+<div id="contributeModal" class="modal">
+    <div class="modal-box" style="border-color: var(--accent);">
+        <div class="m-header">
+            <div class="m-title" style="color:var(--accent);">SELECT EXPERIENCE</div>
+            <span class="m-close" onclick="closeModal('contributeModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <div class="contribute-modal-content">
+                <p style="color:var(--text-sub); margin-bottom:25px; font-size:0.9rem; text-align:center;">
+                    Choose your tier to support the show and gain exclusive fashion benefits.
+                </p>
+                
+                <div class="tier-option" onclick="selectTier(20, 'Lookbook Access')">
+                    <div class="tier-price">$20</div>
+                    <div style="font-weight:bold; margin-bottom:5px;">Lookbook Access</div>
+                    <div style="font-size:0.8rem; color:var(--text-sub);">Digital lookbook + basic access</div>
+                </div>
+                
+                <div class="tier-option" onclick="selectTier(50, 'Trendsetter Pass')">
+                    <div class="tier-price">$50</div>
+                    <div style="font-weight:bold; margin-bottom:5px;">Trendsetter Pass</div>
+                    <div style="font-size:0.8rem; color:var(--text-sub);">50 influence votes + priority</div>
+                </div>
+                
+                <div class="tier-option" onclick="selectTier(250, 'Backstage Pass')">
+                    <div class="tier-price">$250</div>
+                    <div style="font-weight:bold; margin-bottom:5px;">Backstage Experience</div>
+                    <div style="font-size:0.8rem; color:var(--text-sub);">Backstage access, meet designers</div>
+                </div>
+                
+                <button class="submit-action" style="margin-top:20px;" 
+                        onclick="processContribution()" id="contributeBtn">
+                    PROCEED TO PAYMENT
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LEAVE COMMENT MODAL -->
+<div id="askModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">LEAVE A COMMENT</div>
+            <span class="m-close" onclick="closeModal('askModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <textarea class="ask-textarea" id="questionInput" placeholder="Share your thoughts on the collection, styling, or trends..."></textarea>
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <label style="display:flex; align-items:center; font-size:0.8rem;">
+                    <input type="checkbox" id="anonymousCheck" style="margin-right:8px;">
+                    Comment anonymously
+                </label>
+                <label style="display:flex; align-items:center; font-size:0.8rem;">
+                    <input type="checkbox" id="urgentCheck" style="margin-right:8px;">
+                    Pre-Order Request
+                </label>
+            </div>
+            <button class="submit-action" onclick="submitQuestion()">
+                <i class="fas fa-paper-plane"></i> POST COMMENT
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div id="payModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">SECURE PAYMENT</div>
+            <span class="m-close" onclick="closeModal('payModal')">&times;</span>
+        </div>
+        <div class="m-body" style="text-align:center;">
+            <h3 id="paymentTitle" style="margin-bottom:20px;">Payment for Fashion Experience</h3>
+            <div style="font-size:3rem; font-weight:700; margin:20px 0; color:var(--accent); font-family: var(--font-head);">
+                $<span id="payAmount">0</span>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-sub); margin-bottom:25px;">
+                Secure checkout • 256-bit encryption
+            </p>
+            
+            <div style="background:var(--bg-color); padding:20px; border:1px solid var(--border); margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span>Item:</span>
+                    <span id="paymentItem" style="font-weight:bold;"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span>Amount:</span>
+                    <span id="paymentAmount" style="font-weight:bold;"></span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span>Processing fee:</span>
+                    <span id="paymentFee" style="font-weight:bold;"></span>
+                </div>
+                <hr style="border-color:var(--border); margin:15px 0;">
+                <div style="display:flex; justify-content:space-between; font-size:1.1rem; font-weight:bold;">
+                    <span>Total:</span>
+                    <span id="paymentTotal" style="color:var(--accent);"></span>
+                </div>
+            </div>
+            
+            <button class="submit-action" onclick="processPayment()">
+                <i class="fas fa-lock"></i> CONFIRM & PAY
+            </button>
+            
+            <p style="font-size:0.7rem; color:var(--text-sub); margin-top:15px;">
+                By completing this purchase, you agree to our Terms of Service
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============ GLOBAL STATE ============
+    const state = {
+        // Voting state
+        votes: {
+            'CHANEL': { count: 4890, percentage: 48, color: 'secondary' },
+            'CALVIN KLEIN': { count: 5052, percentage: 52, color: 'primary' },
+            'GUCCI': { count: 0, percentage: 0, color: 'accent' },
+            'PRADA': { count: 0, percentage: 0, color: 'primary' },
+            'BALENCIAGA': { count: 0, percentage: 0, color: 'secondary' },
+            'SAINT LAURENT': { count: 0, percentage: 0, color: 'accent' }
+        },
+        totalVotes: 8942,
+        liveAudience: 1247,
+        
+        // Shop The Look state
+        products: [
+            { id: 1, name: 'Crystal Heels', price: '$420', img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=250', description: 'Limited Edition', inCart: false },
+            { id: 2, name: 'Leather Tote', price: '$350', img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=250', description: 'Handcrafted', inCart: false },
+            { id: 3, name: 'Silk Scarf', price: '$180', img: 'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=250', description: 'Printed Silk', inCart: false },
+            { id: 4, name: 'Oversize Blazer', price: '$620', img: null, description: 'Wool Blend', inCart: false }
+        ],
+        
+        // Style Critiques state
+        comments: [
+            { id: 1, text: 'The deconstructed tailoring in collection 3 was absolutely visionary', author: 'Fashion Editor', time: '2m ago', votes: 142, voted: true, answered: true, answer: "Thank you! We were inspired by architectural forms." },
+            { id: 2, text: "Will the crystal heels be available in more colors?", author: 'Style Insider', time: '15m ago', votes: 89, voted: false, answered: false, urgent: true },
+            { id: 3, text: 'The color palette this season feels very fresh and modern', author: 'Anonymous', time: '25m ago', votes: 67, voted: false, answered: true, answer: 'We worked with a new dye specialist for these hues.' }
+        ],
+        
+        // Payment state
+        selectedTier: null,
+        selectedTierName: '',
+        selectedPowerOption: null,
+        selectedPowerVotes: 0,
+        selectedPowerAmount: 0,
+        currentVoteTarget: '',
+        
+        // User state
+        user: {
+            name: 'Fashion Insider',
+            balance: 150,
+            tickets: 1,
+            powerVotes: 50,
+            following: []
+        }
+    };
+
+    // ============ UTILITY FUNCTIONS ============
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    function createHeartAnimation(x, y) {
+        const heart = document.createElement('div');
+        heart.className = 'heart-animation';
+        heart.innerHTML = '<i class="fas fa-heart"></i>';
+        heart.style.left = x + 'px';
+        heart.style.top = y + 'px';
+        document.body.appendChild(heart);
+        
+        setTimeout(() => {
+            document.body.removeChild(heart);
+        }, 1500);
+    }
+
+    // ============ INITIALIZATION ============
+    document.addEventListener('DOMContentLoaded', function() {
+        initializePage();
+        startLiveUpdates();
+        updateNotificationBadges();
+    });
+
+    function initializePage() {
+        // Initialize designers grid
+        renderDesigners();
+        
+        // Initialize shop grid
+        renderShopGrid();
+        
+        // Initialize style critiques
+        renderComments();
+        
+        // Initialize agenda
+        renderAgenda();
+        
+        // Initialize ticker
+        updateTicker();
+        
+        // Set initial time
+        updateMatchTimer();
+        
+        // Set initial notifications
+        updateNotifications();
+    }
+
+    // ============ NAVIGATION ============
+    function switchTab(id, el) {
+        document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(el) el.classList.add('active');
+        
+        // Clear notifications for this tab
+        if(id === 'pitch') {
+            state.pitchNotifications = 0;
+            document.getElementById('pitchNotification').style.display = 'none';
+            document.getElementById('navBattleBadge').style.display = 'none';
+        } else if(id === 'network') {
+            state.networkNotifications = 0;
+            document.getElementById('networkNotification').style.display = 'none';
+            document.getElementById('navNetworkBadge').style.display = 'none';
+        }
+        
+        updateNotificationBadges();
+    }
+
+    // ============ MODAL SYSTEM ============
+    function openModal(id, data) {
+        document.getElementById(id).style.display = 'flex';
+        
+        if(id === 'voteModal' && state.currentVoteTarget) {
+            document.getElementById('voteTarget').innerText = state.currentVoteTarget;
+        }
+        
+        if(id === 'profileModal' && data) {
+            openDesignerProfile(data.name, data.role, data.img, data.bio);
+        }
+    }
+
+    function closeModal(id) { 
+        document.getElementById(id).style.display = 'none'; 
+        
+        // Reset form if it's the comment modal
+        if(id === 'askModal') {
+            document.getElementById('questionInput').value = '';
+        }
+    }
+
+    // ============ VOTING SYSTEM ============
+    function openVote(name, location, target) {
+        state.currentVoteTarget = target;
+        document.getElementById('voteTarget').innerText = target;
+        switchVoteTab('free', document.querySelector('.v-tab'));
+        openModal('voteModal');
+    }
+
+    function switchVoteTab(type, el) {
+        document.querySelectorAll('.v-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('freeVoteSection').style.display = type === 'free' ? 'block' : 'none';
+        document.getElementById('powerVoteSection').style.display = type === 'power' ? 'block' : 'none';
+    }
+
+    function selectPowerOption(votes, amount) {
+        state.selectedPowerVotes = votes;
+        state.selectedPowerAmount = amount;
+        
+        document.querySelectorAll('.power-opt').forEach(o => o.classList.remove('selected'));
+        event.target.closest('.power-opt').classList.add('selected');
+    }
+
+    function castFreeVote() {
+        if(!state.currentVoteTarget) return;
+        
+        const target = state.currentVoteTarget;
+        if(state.votes[target]) {
+            // Create heart animation at button position
+            const btn = event.target;
+            const rect = btn.getBoundingClientRect();
+            createHeartAnimation(rect.left + rect.width/2, rect.top);
+            
+            // Update vote counts
+            state.votes[target].count += 1;
+            state.totalVotes += 1;
+            
+            // Update percentages
+            updateVotePercentages();
+            
+            // Update UI
+            updateVoteUI();
+            
+            // Show success
+            showToast('Love sent to ' + target + '! ❤️');
+            closeModal('voteModal');
+            
+            // Add announcement
+            addAnnouncement('vote', `${target} received new love!`);
+            
+            // Update notifications
+            state.pitchNotifications = (state.pitchNotifications || 0) + 1;
+            updateNotificationBadges();
+        }
+    }
+
+    function purchasePowerVotes() {
+        if(state.selectedPowerVotes === 0) {
+            showToast('Please select an influence vote package first');
+            return;
+        }
+        
+        if(!state.currentVoteTarget) return;
+        
+        const target = state.currentVoteTarget;
+        if(state.votes[target]) {
+            // Update vote counts
+            state.votes[target].count += state.selectedPowerVotes;
+            state.totalVotes += state.selectedPowerVotes;
+            
+            // Update percentages
+            updateVotePercentages();
+            
+            // Update UI
+            updateVoteUI();
+            
+            // Create multiple heart animations
+            for(let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = window.innerHeight - 100;
+                    createHeartAnimation(x, y);
+                }, i * 100);
+            }
+            
+            // Process payment
+            openPay(state.selectedPowerAmount, `${state.selectedPowerVotes} Influence Votes for ${target}`);
+            
+            // Add announcement
+            addAnnouncement('power', `${target} received ${state.selectedPowerVotes} influence votes!`);
+            
+            // Reset selection
+            state.selectedPowerVotes = 0;
+            state.selectedPowerAmount = 0;
+        }
+    }
+
+    function updateVotePercentages() {
+        const total = Object.values(state.votes).reduce((sum, vote) => sum + vote.count, 0);
+        
+        Object.keys(state.votes).forEach(designer => {
+            const vote = state.votes[designer];
+            vote.percentage = total > 0 ? Math.round((vote.count / total) * 100) : 0;
+        });
+        
+        // Update total votes display
+        document.getElementById('totalVotes').textContent = formatNumber(total);
+    }
+
+    function updateVoteUI() {
+        // Update CHANEL
+        const chanelVote = state.votes['CHANEL'];
+        document.getElementById('voteRed').textContent = chanelVote.percentage + '%';
+        document.getElementById('progressRed').style.width = chanelVote.percentage + '%';
+        
+        // Update CALVIN KLEIN
+        const ckVote = state.votes['CALVIN KLEIN'];
+        document.getElementById('voteBlue').textContent = ckVote.percentage + '%';
+        document.getElementById('progressBlue').style.width = ckVote.percentage + '%';
+        
+        // Update total votes
+        document.getElementById('totalVotes').textContent = formatNumber(state.totalVotes);
+    }
+
+    // ============ CONTRIBUTION & PAYMENT ============
+    function openTierSelection(amount, name) {
+        state.selectedTier = amount;
+        state.selectedTierName = name;
+        openModal('contributeModal');
+    }
+
+    function selectTier(amount, name) {
+        state.selectedTier = amount;
+        state.selectedTierName = name;
+        
+        document.querySelectorAll('.tier-option').forEach(o => o.classList.remove('selected'));
+        event.target.closest('.tier-option').classList.add('selected');
+    }
+
+    function processContribution() {
+        if(!state.selectedTier) {
+            showToast('Please select an experience tier first');
+            return;
+        }
+        
+        openPay(state.selectedTier, state.selectedTierName);
+        closeModal('contributeModal');
+    }
+
+    function openContributeModal() {
+        openModal('contributeModal');
+    }
+
+    function openPay(amount, description) {
+        const fee = amount * 0.029 + 0.30;
+        const total = (amount + fee).toFixed(2);
+        
+        document.getElementById('payAmount').textContent = amount;
+        document.getElementById('paymentTitle').textContent = 'Payment for ' + description;
+        document.getElementById('paymentItem').textContent = description;
+        document.getElementById('paymentAmount').textContent = '$' + amount.toFixed(2);
+        document.getElementById('paymentFee').textContent = '$' + fee.toFixed(2);
+        document.getElementById('paymentTotal').textContent = '$' + total;
+        
+        openModal('payModal');
+    }
+
+    function processPayment() {
+        const btn = document.querySelector('#payModal .submit-action');
+        const original = btn.innerHTML;
+        
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING...';
+        btn.disabled = true;
+        
+        setTimeout(() => {
+            showToast('Payment successful! Enjoy your fashion experience. ✨');
+            closeModal('payModal');
+            
+            // Update user balance
+            state.user.balance -= parseFloat(document.getElementById('payAmount').textContent);
+            
+            // If this was a vote pack, add to user's votes
+            if(state.selectedPowerVotes > 0) {
+                state.user.powerVotes += state.selectedPowerVotes;
+            }
+            
+            // Reset
+            state.selectedTier = null;
+            state.selectedTierName = '';
+            state.selectedPowerVotes = 0;
+            state.selectedPowerAmount = 0;
+            
+            btn.innerHTML = original;
+            btn.disabled = false;
+            
+            // Add announcement
+            addAnnouncement('payment', 'New fashion experience purchased!');
+        }, 1500);
+    }
+
+    // ============ SHOP THE LOOK ============
+    function renderShopGrid() {
+        const grid = document.getElementById('networkGrid');
+        grid.innerHTML = '';
+        
+        state.products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'profile-card-grid';
+            
+            card.innerHTML = `
+                <div class="pcg-avatar" style="background-image: ${product.img ? `url('${product.img}')` : 'none'};">
+                    ${!product.img ? '<i class="fas fa-tshirt"></i>' : ''}
+                </div>
+                <div class="pcg-name">${product.name}</div>
+                <div class="pcg-role">${product.description}</div>
+                <div style="font-size:1.2rem; font-weight:700; margin-bottom:15px; color:var(--accent);">${product.price}</div>
+                <button class="pcg-btn" onclick="addToCart(${product.id})">
+                    ${product.inCart ? 'IN CART' : 'BUY NOW'}
+                </button>
+            `;
+            
+            grid.appendChild(card);
+        });
+        
+        // Update shop count
+        const itemCount = getRandomInt(120, 130);
+        const newCount = getRandomInt(5, 10);
+        document.getElementById('networkCount').textContent = `${itemCount} ITEMS • ${newCount} NEW`;
+    }
+
+    function addToCart(productId) {
+        event.stopPropagation();
+        
+        const product = state.products.find(p => p.id === productId);
+        if(!product) return;
+        
+        product.inCart = !product.inCart;
+        
+        if(product.inCart) {
+            showToast(`${product.name} added to cart!`);
+            
+            // Add announcement
+            addAnnouncement('shop', `${product.name} added to cart`);
+            
+            // Update notification
+            state.networkNotifications = (state.networkNotifications || 0) + 1;
+            updateNotificationBadges();
+        } else {
+            showToast(`${product.name} removed from cart`);
+        }
+        
+        // Update UI
+        renderShopGrid();
+    }
+
+    function openDesignerProfile(name, role, img, bio) {
+        document.getElementById('pName').textContent = name;
+        document.getElementById('pRole').textContent = role;
+        
+        const avatar = document.getElementById('pAvatar');
+        avatar.style.backgroundImage = img ? `url('${img}')` : 'none';
+        avatar.innerHTML = img ? '' : '<i class="fas fa-user" style="font-size:3rem; color:var(--text-sub); margin-top:25px;"></i>';
+        
+        if(bio) {
+            document.getElementById('designerBio').textContent = bio;
+        }
+        
+        document.getElementById('raisedAmount').textContent = `$${getRandomInt(20000, 50000)}`;
+        document.getElementById('pGoalFill').style.width = '0%';
+        
+        const followBtn = document.getElementById('connectButton');
+        const isFollowing = state.user.following.includes(name);
+        followBtn.innerHTML = isFollowing ? 
+            '<i class="fas fa-check"></i> FOLLOWING' : 
+            '<i class="fas fa-heart"></i> FOLLOW DESIGNER';
+        followBtn.dataset.designerName = name;
+        
+        openModal('profileModal');
+        
+        setTimeout(() => {
+            document.getElementById('pGoalFill').style.width = getRandomInt(60, 95) + '%';
+        }, 200);
+    }
+
+    function toggleConnect() {
+        const designerName = document.getElementById('connectButton').dataset.designerName;
+        if(!designerName) return;
+        
+        const index = state.user.following.indexOf(designerName);
+        
+        if(index === -1) {
+            state.user.following.push(designerName);
+            showToast(`Now following ${designerName}!`);
+            
+            // Add announcement
+            addAnnouncement('follow', `You started following ${designerName}`);
+            
+            // Update notification
+            state.networkNotifications = (state.networkNotifications || 0) + 1;
+            updateNotificationBadges();
+            
+            document.getElementById('connectButton').innerHTML = '<i class="fas fa-check"></i> FOLLOWING';
+        } else {
+            state.user.following.splice(index, 1);
+            showToast(`Unfollowed ${designerName}`);
+            document.getElementById('connectButton').innerHTML = '<i class="fas fa-heart"></i> FOLLOW DESIGNER';
+        }
+    }
+
+    function viewFullCollection() {
+        const designerName = document.getElementById('pName').textContent;
+        showToast(`Opening ${designerName} collection...`);
+        closeModal('profileModal');
+        
+        // Add announcement
+        addAnnouncement('collection', `Viewing ${designerName} full collection`);
+    }
+
+    // ============ STYLE CRITIQUES ============
+    function renderComments() {
+        const container = document.getElementById('questionsContainer');
+        container.innerHTML = '';
+        
+        state.comments.forEach((comment, index) => {
+            const qaCard = document.createElement('div');
+            qaCard.className = 'qa-card';
+            
+            qaCard.innerHTML = `
+                <div class="upvote-box" onclick="voteComment(${comment.id})">
+                    <i class="fas fa-chevron-up arrow ${comment.voted ? 'active' : ''}"></i>
+                    <span class="count">${comment.votes}</span>
+                </div>
+                <div>
+                    <div style="font-weight:700; font-size:1rem; margin-bottom:8px; color:white;">
+                        ${comment.text}
+                    </div>
+                    <div style="font-size:0.8rem; color:var(--text-sub); margin-bottom:${comment.answered ? '10px' : '0'};">
+                        By <strong style="color:var(--accent);">${comment.author}</strong> • ${comment.time}
+                        ${comment.urgent ? '<span style="border:1px solid var(--accent); color:var(--accent); padding:2px 6px; margin-left:8px; font-size:0.7rem;">PRE-ORDER</span>' : ''}
+                    </div>
+                    ${comment.answered ? `
+                        <div style="font-size:0.8rem; color:var(--text-sub); background: rgba(255,255,255,0.05); padding:8px 12px; border:1px solid var(--border);">
+                            <i class="fas fa-reply" style="margin-right:8px;"></i>
+                            <strong>Designer Response:</strong> "${comment.answer}"
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            container.appendChild(qaCard);
+        });
+    }
+
+    function voteComment(commentId) {
+        const comment = state.comments.find(c => c.id === commentId);
+        if(!comment) return;
+        
+        if(comment.voted) {
+            comment.votes--;
+            comment.voted = false;
+        } else {
+            comment.votes++;
+            comment.voted = true;
+        }
+        
+        renderComments();
+        
+        // Add announcement for popular comments
+        if(comment.votes > 100) {
+            addAnnouncement('comment', `Popular comment: "${comment.text.substring(0, 50)}..."`);
+        }
+    }
+
+    function submitQuestion() {
+        const input = document.getElementById('questionInput');
+        const text = input.value.trim();
+        
+        if(!text) {
+            showToast('Please enter a comment');
+            return;
+        }
+        
+        const isAnonymous = document.getElementById('anonymousCheck').checked;
+        const isUrgent = document.getElementById('urgentCheck').checked;
+        
+        const newComment = {
+            id: state.comments.length + 1,
+            text: text,
+            author: isAnonymous ? 'Anonymous' : state.user.name,
+            time: 'Just now',
+            votes: 0,
+            voted: false,
+            answered: false,
+            urgent: isUrgent
+        };
+        
+        state.comments.unshift(newComment);
+        renderComments();
+        
+        showToast('Comment posted!');
+        closeModal('askModal');
+        
+        // Add announcement
+        addAnnouncement('comment', `New style critique: "${text.substring(0, 40)}..."`);
+        
+        // Update notification
+        state.qaNotifications = (state.qaNotifications || 0) + 1;
+        updateNotificationBadges();
+    }
+
+    // ============ DESIGNERS ============
+    function renderDesigners() {
+        const grid = document.getElementById('contestantGrid');
+        grid.innerHTML = '';
+        
+        const designers = [
+            { name: 'CHANEL', img: 'https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=150', match: 'Live Now • Paris', active: true, bio: 'French luxury fashion house founded by Coco Chanel. Known for timeless elegance, tweed suits, and the little black dress.' },
+            { name: 'CALVIN KLEIN', img: 'https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=150', match: 'Live Now • NYC', active: true, bio: 'American fashion brand established in 1968. Famous for minimalist aesthetics, denim, and fragrance lines.' },
+            { name: 'GUCCI', img: 'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=150', match: 'Up Next • Milan', active: false, bio: 'Italian luxury brand founded in Florence. Recognized for bold prints, horsebit loafers, and maximalist designs.' },
+            { name: 'PRADA', img: 'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=150', match: 'Up Next • Milan', active: false, bio: 'Italian luxury fashion house specializing in leather handbags, travel accessories, and ready-to-wear.' },
+            { name: 'BALENCIAGA', img: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=150', match: 'Paris Show', active: false, bio: 'French luxury house founded by Cristóbal Balenciaga. Known for avant-garde designs and oversized silhouettes.' },
+            { name: 'SAINT LAURENT', img: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=150', match: 'Paris Show', active: false, bio: 'French luxury fashion house founded by Yves Saint Laurent. Famous for le smoking tuxedo and safari jackets.' }
+        ];
+        
+        designers.forEach(designer => {
+            const card = document.createElement('div');
+            card.className = `c-card ${designer.active ? 'active' : ''}`;
+            card.onclick = () => openDesignerProfile(designer.name, designer.match.split(' • ')[1], designer.img, designer.bio);
+            
+            card.innerHTML = `
+                <div class="c-img" style="background-image: url('${designer.img}');"></div>
+                <div class="c-info">
+                    <div class="c-title">${designer.name}</div>
+                    <div class="c-sub">${designer.match}</div>
+                </div>
+                <div class="c-vote-icon">VIEW</div>
+            `;
+            
+            grid.appendChild(card);
+        });
+    }
+
+    // ============ AGENDA ============
+    function renderAgenda() {
+        const agenda = [
+            { time: '10:00 AM', desc: 'Doors Open & Welcome Drinks', current: false },
+            { time: '11:30 AM', desc: 'Emerging Designers Showcase', current: false },
+            { time: '14:30 PM', desc: 'Main Event: NYC vs PARIS Runway Battle', current: true },
+            { time: '15:45 PM', desc: 'Milan Designers: Gucci vs Prada', current: false },
+            { time: '16:15 PM', desc: 'Networking & Champagne Reception', current: false },
+            { time: '17:30 PM', desc: 'Sustainable Fashion Panel', current: false },
+            { time: '19:00 PM', desc: '🏆 Awards Ceremony & Afterparty', current: false }
+        ];
+        
+        const list = document.getElementById('agendaList');
+        list.innerHTML = '';
+        
+        agenda.forEach(item => {
+            const li = document.createElement('li');
+            li.className = `agenda-item ${item.current ? 'current' : ''}`;
+            
+            li.innerHTML = `
+                <span class="agenda-time">${item.time}</span> 
+                <span class="agenda-desc">
+                    ${item.desc}
+                    ${item.current ? '<span class="current-session">LIVE NOW</span>' : ''}
+                </span>
+            `;
+            
+            list.appendChild(li);
+        });
+    }
+
+    // ============ LIVE UPDATES ============
+    function startLiveUpdates() {
+        // Update live stats every 3 seconds
+        setInterval(updateLiveStats, 3000);
+        
+        // Update match timer every second
+        setInterval(updateMatchTimer, 1000);
+        
+        // Update ticker every 10 seconds
+        setInterval(updateTicker, 10000);
+        
+        // Random announcements
+        setInterval(addRandomAnnouncement, 15000);
+        
+        // Random vote fluctuations
+        setInterval(simulateVoteFluctuations, 5000);
+    }
+
+    function updateLiveStats() {
+        // Update audience count with small random changes
+        const audienceChange = getRandomInt(-5, 10);
+        state.liveAudience = Math.max(1200, state.liveAudience + audienceChange);
+        document.getElementById('liveAudience').textContent = formatNumber(state.liveAudience);
+        
+        // Update total votes with random new votes
+        const newVotes = getRandomInt(10, 50);
+        state.totalVotes += newVotes;
+        document.getElementById('totalVotes').textContent = formatNumber(state.totalVotes);
+        
+        // Update match info occasionally
+        if(Math.random() > 0.7) {
+            const matches = [
+                'NYC vs PARIS • 14:30',
+                'MILAN SHOWCASE • 15:45',
+                'SUSTAINABLE FASHION • 17:30'
+            ];
+            const current = document.getElementById('currentMatch');
+            if(current) {
+                current.textContent = matches[getRandomInt(0, matches.length - 1)];
+            }
+        }
+    }
+
+    function updateMatchTimer() {
+        const timer = document.getElementById('matchTimer');
+        if(!timer) return;
+        
+        const parts = timer.textContent.split(':');
+        let minutes = parseInt(parts[0]);
+        let seconds = parseInt(parts[1]);
+        
+        seconds++;
+        if(seconds >= 60) {
+            seconds = 0;
+            minutes++;
+        }
+        
+        timer.textContent = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+        
+        // Update next session timer
+        const nextTimer = document.getElementById('liveTimer');
+        if(nextTimer) {
+            const nextMinutes = 45 - minutes;
+            nextTimer.textContent = `NEXT: ${nextMinutes > 0 ? nextMinutes + 'm' : 'SOON'}`;
+        }
+    }
+
+    function simulateVoteFluctuations() {
+        // Random small vote changes
+        Object.keys(state.votes).forEach(designer => {
+            const change = getRandomInt(-3, 5);
+            state.votes[designer].count = Math.max(0, state.votes[designer].count + change);
+        });
+        
+        updateVotePercentages();
+        updateVoteUI();
+    }
+
+    // ============ ANNOUNCEMENTS ============
+    function updateTicker() {
+        const announcements = [
+            { icon: 'bullhorn', text: 'Welcome to Fashion Week Live!' },
+            { icon: 'heart', text: 'CHANEL just received 50 influence votes!' },
+            { icon: 'shopping-bag', text: 'Crystal Heels added to cart by 12 users' },
+            { icon: 'comment-alt', text: 'New style critique about sustainable fashion' },
+            { icon: 'walking', text: 'Next runway show starts in 15 minutes!' },
+            { icon: 'crown', text: 'Backstage passes selling fast - limited spots!' },
+            { icon: 'users', text: 'Networking reception starting soon' },
+            { icon: 'chart-line', text: 'Trend score just passed 9,000!' }
+        ];
+        
+        const ticker = document.getElementById('announcementTicker');
+        let tickerHTML = '';
+        
+        // Show 3 random announcements
+        const shuffled = [...announcements].sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 3);
+        
+        selected.forEach(ann => {
+            tickerHTML += `<i class="fas fa-${ann.icon}"></i> ${ann.text} • `;
+        });
+        
+        ticker.innerHTML = tickerHTML;
+    }
+
+    function addRandomAnnouncement() {
+        const types = ['vote', 'shop', 'comment', 'payment', 'general'];
+        const type = types[getRandomInt(0, types.length - 1)];
+        
+        switch(type) {
+            case 'vote':
+                const designers = Object.keys(state.votes);
+                const designer = designers[getRandomInt(0, designers.length - 1)];
+                addAnnouncement('vote', `${designer} received ${getRandomInt(5, 20)} new votes!`);
+                break;
+            case 'shop':
+                const products = ['Crystal Heels', 'Leather Tote', 'Silk Scarf', 'Oversize Blazer'];
+                const product = products[getRandomInt(0, products.length - 1)];
+                addAnnouncement('shop', `${product} is trending right now`);
+                break;
+            case 'general':
+                const messages = [
+                    'Don\'t forget to vote for your favorite collection!',
+                    'Backstage meet & greet in the VIP lounge now',
+                    'Q&A with designers starting in 10 minutes',
+                    'Champagne reception in the main hall'
+                ];
+                const message = messages[getRandomInt(0, messages.length - 1)];
+                addAnnouncement('general', message);
+                break;
+        }
+    }
+
+    function addAnnouncement(type, text) {
+        // Update notification badges based on type
+        switch(type) {
+            case 'vote':
+                state.pitchNotifications = (state.pitchNotifications || 0) + 1;
+                break;
+            case 'shop':
+            case 'follow':
+                state.networkNotifications = (state.networkNotifications || 0) + 1;
+                break;
+            case 'comment':
+                state.qaNotifications = (state.qaNotifications || 0) + 1;
+                break;
+        }
+        
+        updateNotificationBadges();
+        
+        // In a real app, this would add to the ticker
+        console.log(`Announcement: ${text}`);
+    }
+
+    // ============ NOTIFICATIONS ============
+    function updateNotificationBadges() {
+        // Runway notifications
+        const pitchBadge = document.getElementById('pitchNotification');
+        const navBattleBadge = document.getElementById('navBattleBadge');
+        
+        if(state.pitchNotifications > 0) {
+            pitchBadge.style.display = 'block';
+            navBattleBadge.style.display = 'flex';
+            navBattleBadge.textContent = state.pitchNotifications > 9 ? '9+' : state.pitchNotifications;
+        } else {
+            pitchBadge.style.display = 'none';
+            navBattleBadge.style.display = 'none';
+        }
+        
+        // Shop notifications
+        const networkBadge = document.getElementById('networkNotification');
+        const navNetworkBadge = document.getElementById('navNetworkBadge');
+        
+        if(state.networkNotifications > 0) {
+            networkBadge.style.display = 'block';
+            navNetworkBadge.style.display = 'flex';
+            navNetworkBadge.textContent = state.networkNotifications > 9 ? '9+' : state.networkNotifications;
+        } else {
+            networkBadge.style.display = 'none';
+            navNetworkBadge.style.display = 'none';
+        }
+        
+        // Style critiques notifications (just tab badge)
+        const qaBadge = document.getElementById('qaNotification');
+        if(state.qaNotifications > 0) {
+            qaBadge.style.display = 'block';
+        } else {
+            qaBadge.style.display = 'none';
+        }
+    }
+
+    function updateNotifications() {
+        // Simulate random notifications
+        if(Math.random() > 0.7) {
+            state.pitchNotifications = (state.pitchNotifications || 0) + 1;
+        }
+        if(Math.random() > 0.8) {
+            state.networkNotifications = (state.networkNotifications || 0) + 1;
+        }
+        if(Math.random() > 0.6) {
+            state.qaNotifications = (state.qaNotifications || 0) + 1;
+        }
+        
+        updateNotificationBadges();
+        
+        // Schedule next update
+        setTimeout(updateNotifications, getRandomInt(10000, 30000));
+    }
+
+    // ============ QUICK ACTIONS ============
+    function openQuickActions() {
+        const actions = [
+            { text: 'Buy Influence Votes', icon: 'heart', action: () => openVote('Quick Vote', 'white', 'Quick Vote') },
+            { text: 'Leave Comment', icon: 'comment-alt', action: () => openModal('askModal') },
+            { text: 'View Schedule', icon: 'calendar-alt', action: () => openModal('agendaModal') },
+            { text: 'Shop Looks', icon: 'shopping-bag', action: () => switchTab('network') }
+        ];
+        
+        // Create quick action menu
+        const menu = document.createElement('div');
+        menu.style.cssText = `
+            position: fixed;
+            bottom: 150px;
+            right: 20px;
+            background: var(--modal-bg);
+            border-radius: 0;
+            padding: 15px;
+            box-shadow: none;
+            z-index: 199;
+            min-width: 200px;
+            border: 1px solid var(--border);
+        `;
+        
+        actions.forEach(action => {
+            const btn = document.createElement('div');
+            btn.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 15px;
+                cursor: pointer;
+                border-radius: 0;
+                transition: background 0.2s;
+                color: white;
+                border-bottom: 1px solid var(--border);
+            `;
+            btn.onmouseenter = () => btn.style.background = 'rgba(255,255,255,0.05)';
+            btn.onmouseleave = () => btn.style.background = 'transparent';
+            btn.onclick = () => {
+                action.action();
+                document.body.removeChild(menu);
+            };
+            
+            btn.innerHTML = `
+                <i class="fas fa-${action.icon}" style="color: var(--accent);"></i>
+                <span style="font-weight: 600;">${action.text}</span>
+            `;
+            
+            menu.appendChild(btn);
+        });
+        
+        // Close button
+        const closeBtn = document.createElement('div');
+        closeBtn.style.cssText = `
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            color: var(--text-sub);
+            font-size: 0.8rem;
+            cursor: pointer;
+            border-top: 1px solid var(--border);
+        `;
+        closeBtn.textContent = 'Close';
+        closeBtn.onclick = () => document.body.removeChild(menu);
+        menu.appendChild(closeBtn);
+        
+        // Add to body
+        document.body.appendChild(menu);
+        
+        // Close on outside click
+        setTimeout(() => {
+            const closeOnClick = (e) => {
+                if(!menu.contains(e.target) && !e.target.closest('.quick-action-fab')) {
+                    document.body.removeChild(menu);
+                    document.removeEventListener('click', closeOnClick);
+                }
+            };
+            document.addEventListener('click', closeOnClick);
+        }, 100);
+    }
+
+    // ============ UI HELPERS ============
+    function showToast(message) {
+        // Remove existing toast
+        const existing = document.querySelector('.toast');
+        if(existing) existing.remove();
+        
+        // Create toast
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.style.cssText = `
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: black;
+            padding: 12px 24px;
+            border-radius: 0;
+            font-weight: bold;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+            border: 1px solid var(--accent);
+        `;
+        
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.animation = 'slideUp 0.3s ease';
+            setTimeout(() => {
+                if(toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // Add CSS for animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(0); opacity: 1; }
+            to { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+</body>
+</html>

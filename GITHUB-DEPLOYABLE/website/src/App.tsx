@@ -10,7 +10,6 @@ import { PortfolioPage } from "./components/PortfolioPage";
 import { AdminDashboardFull } from "./components/AdminDashboardFull";
 import { CRM } from "./components/CRM";
 import { ClientPortal } from "./components/ClientPortal";
-import { EventOSDemo } from "./components/EventOSDemo";
 import { Login } from "./components/Login";
 import { Signup } from "./components/Signup";
 import { getSupabaseClient } from './utils/supabase/client';
@@ -151,7 +150,7 @@ export default function App() {
       case "client-portal":
         return <ClientPortal onNavigate={handleNavigate} />;
       case "event-os-demo":
-        return <EventOSDemo onNavigate={handleNavigate} />;
+        return <HomePage onNavigate={handleNavigate} />;
       default:
         return <HomePage onNavigate={handleNavigate} />;
     }

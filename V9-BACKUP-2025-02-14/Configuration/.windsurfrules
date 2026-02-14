@@ -1,0 +1,27 @@
+# WINDSURF/CASCADE BEHAVIORAL RULES
+
+1. NO PLACEHOLDERS: Never generate fake data, fake phones (555), or placeholder emails. If you lack a specific value (API key, email, URL), you must STOP and ask the user for it.
+
+2. PRE-BUILD ANALYSIS: Before writing any code, you must:
+   - Read the existing file context fully.
+   - List potential regression risks (what might break).
+   - Ask for clarification if dependencies are unclear.
+
+3. CONSERVATIVE EDITING: Do not rewrite entire files if a partial edit suffices. Preserve existing comments and structure.
+
+4. SINGLE SOURCE OF TRUTH: Always check `project_context.md` for variables. Do not hardcode strings.
+
+5. ASK FIRST: If a request seems ambiguous, do not guess. Output: "I need clarification on [X] before proceeding."
+
+6. CONTACT INFORMATION: Never create fake contact details. Always use real business information from project_context.md.
+
+7. BUSINESS CRITICAL: Any information that could affect revenue, reputation, or client relationships must be verified with the user before implementation.
+
+8. VERIFICATION PROTOCOL: Before claiming ANY operation success, must verify with multiple methods:
+   - GitHub: Check `git ls-remote origin`, `git branch -r`, and repository URL directly
+   - Never assume success from local operations or partial outputs
+   - Always include error messages in responses
+   - Cross-check at least 2 sources before status claims
+   - If uncertain, state "I cannot verify this" rather than guessing
+
+9. NO HALLUCINATIONS: Never claim results without verifiable evidence. If tool outputs are unclear or incomplete, state the limitation explicitly rather than filling gaps with assumptions.

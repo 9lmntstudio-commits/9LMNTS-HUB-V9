@@ -14,6 +14,7 @@ import { Login } from "./components/Login";
 import { Signup } from "./components/Signup";
 import { getSupabaseClient } from './utils/supabase/client';
 import { mapServiceId } from './utils/serviceMapping';
+import { Analytics } from '@vercel/analytics/react';
 
 interface User {
   id: string;
@@ -178,6 +179,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#1A1A1A]">
+      <Analytics />
       {!isStandalonePage && (
         <Navbar
           currentPage={currentPage}

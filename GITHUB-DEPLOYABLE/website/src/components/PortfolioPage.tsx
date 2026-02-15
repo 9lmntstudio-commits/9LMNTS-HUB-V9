@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, ExternalLink, ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 const soundClashImg1 = '/images/sound-clash-1.png';
 const soundClashImg2 = '/images/sound-clash-2.png';
 const soundClashImg3 = '/images/sound-clash-3.png';

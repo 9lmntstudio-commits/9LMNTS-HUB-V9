@@ -1,0 +1,2863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🥊 LIVE: SPORTS CLASH OS - Paul vs Joshua</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Condensed:wght@300;400;700&family=Roboto+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- BOXING THEME VARIABLES --- */
+        :root {
+            --championship-gold: #FFD700;           /* Main accent - belts, winners */
+            --ring-red: #DC143C;                   /* Paul's corner */
+            --ring-blue: #4169E1;                  /* Joshua's corner */
+            --canvas-white: #FFFFFF;               /* Clean backgrounds */
+            --mat-black: #000814;                  /* Dark backgrounds */
+            --knockout-orange: #FF7F00;            /* High-value bets */
+            --tape-green: #008000;                 /* Winning bets */
+            --blood-crimson: #8B0000;              /* Critical odds changes */
+            --chalk-gray: #D3D3D3;                 /* Neutral text */
+            --ring-post: #1E293B;                  /* Card backgrounds */
+            --status-win: #10B981;                 /* Winning bet */
+            --status-loss: #EF4444;                /* Losing bet */
+            --status-push: #F59E0B;                /* Draw/void bet */
+            --status-pending: #3B82F6;             /* Live bet */
+            
+            --gradient-champion: linear-gradient(135deg, #FFD700 0%, #FF7F00 100%);
+            --gradient-ring: linear-gradient(90deg, #DC143C 0%, #4169E1 100%);
+            --gradient-card: linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(0, 8, 20, 0.98) 100%);
+            
+            --font-champion: 'Bebas Neue', sans-serif;
+            --font-sport: 'Roboto Condensed', sans-serif;
+            --font-mono: 'Roboto Mono', monospace;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body { 
+            background: linear-gradient(135deg, #000814 0%, #000000 100%);
+            color: var(--canvas-white); 
+            font-family: var(--font-sport); 
+            margin: 0; 
+            padding-bottom: 90px;
+            overflow-x: hidden;
+        }
+        
+        .app-container { 
+            max-width: 480px; 
+            margin: 0 auto; 
+            min-height: 100vh; 
+            background: var(--mat-black); 
+            position: relative; 
+            overflow-x: hidden;
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.15);
+        }
+        
+        /* LIVE EVENT HEADER */
+        .live-event-header { 
+            background: linear-gradient(90deg, rgba(0, 8, 20, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+            padding: 12px 20px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 2px solid var(--championship-gold);
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo { 
+            font-family: var(--font-champion); 
+            font-size: 1.8rem; 
+            letter-spacing: 1.5px; 
+            text-transform: uppercase; 
+            color: white; 
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+        }
+        
+        .logo .gold { color: var(--championship-gold); }
+        .logo .event-tag {
+            font-size: 0.7rem;
+            background: var(--ring-red);
+            padding: 3px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .live-status {
+            display: flex; 
+            align-items: center; 
+            gap: 10px;
+        }
+        
+        .live-badge { 
+            background: linear-gradient(90deg, var(--ring-red), var(--knockout-orange));
+            color: white; 
+            font-size: 0.7rem; 
+            font-weight: 900; 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(220, 20, 60, 0.6);
+            animation: pulse-glow 1.5s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(220, 20, 60, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(220, 20, 60, 0.9); }
+        }
+        
+        .live-timer {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--championship-gold);
+            background: rgba(255, 215, 0, 0.1);
+            padding: 4px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--championship-gold);
+        }
+
+        /* LIVE ANNOUNCEMENT TICKER */
+        .announcement-ticker {
+            background: rgba(220, 20, 60, 0.1);
+            border-bottom: 1px solid rgba(220, 20, 60, 0.3);
+            padding: 8px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .ticker-content {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
+            color: var(--championship-gold);
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding-left: 100%;
+        }
+        
+        .ticker-content i { margin: 0 10px; color: var(--ring-red); }
+        
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* HERO DASHBOARD - BOXING STYLE */
+        .hero-dashboard-live {
+            background: radial-gradient(ellipse at center, #1E293B 0%, #000814 70%);
+            padding: 25px 20px 20px; 
+            text-align: center; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .hero-dashboard-live::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--gradient-ring);
+        }
+        
+        .hero-sub { 
+            color: var(--championship-gold); 
+            font-weight: 900; 
+            letter-spacing: 3px; 
+            font-size: 0.75rem; 
+            margin: 10px 0 20px; 
+            text-transform: uppercase;
+        }
+        
+        .hero-title { 
+            font-family: var(--font-champion); 
+            margin: 0; 
+            font-size: 3.2rem; 
+            line-height: 0.9; 
+            color: white; 
+            text-transform: uppercase; 
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        
+        .fighter {
+            display: block;
+            font-size: 2.5rem;
+            margin: 10px 0;
+        }
+        
+        .fighter.red { color: var(--ring-red); }
+        .fighter.blue { color: var(--ring-blue); }
+        .vs { 
+            color: var(--chalk-gray); 
+            font-size: 1rem; 
+            font-weight: 900; 
+            margin: 5px 0; 
+        }
+        
+        .odds-display {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .odds-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 120px;
+        }
+        
+        .odds-box.red { border-color: var(--ring-red); }
+        .odds-box.blue { border-color: var(--ring-blue); }
+        
+        .odds-label {
+            font-size: 0.7rem;
+            color: var(--chalk-gray);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        
+        .odds-value {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: 900;
+            color: white;
+        }
+        
+        .odds-value.positive { color: var(--tape-green); }
+        .odds-value.negative { color: var(--ring-red); }
+        
+        .live-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0 20px;
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            display: block;
+            line-height: 1;
+        }
+        
+        .stat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: var(--chalk-gray);
+            font-weight: 700;
+            margin-top: 5px;
+            display:block;
+        }
+        
+        .stat-icon {
+            color: var(--championship-gold);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .main-cta-btn { 
+            width: 100%; 
+            padding: 18px; 
+            background: var(--gradient-champion);
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: 900; 
+            font-size: 1rem; 
+            margin: 15px 0 10px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            text-transform: uppercase;
+            box-shadow: 0 5px 25px rgba(255, 215, 0, 0.4);
+            font-family: var(--font-sport);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-cta-btn:active { transform: scale(0.98); }
+        .main-cta-btn:hover { box-shadow: 0 8px 30px rgba(255, 215, 0, 0.6); }
+
+        /* QUICK BET SECTION */
+        .bet-section {
+            padding: 20px 0 25px 20px; 
+            margin: 25px 20px; 
+            background: var(--ring-post); 
+            border-radius: 16px;
+            border: 2px solid var(--championship-gold);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+        
+        .section-header { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-bottom: 20px; 
+            color: white; 
+            font-weight: 800; 
+            font-size: 1rem; 
+        }
+        
+        .section-header i { color: var(--championship-gold); font-size: 1.1rem; }
+        
+        .bet-row { 
+            display: flex; 
+            gap: 12px; 
+            overflow-x: auto; 
+            padding-bottom: 5px; 
+            padding-right: 20px; 
+            scrollbar-width: none; 
+        }
+        
+        .bet-card {
+            min-width: 140px; 
+            padding: 18px 12px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            background: rgba(0, 8, 20, 0.7); 
+            cursor: pointer; 
+            text-align: center; 
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .bet-card:active { transform: scale(0.97); }
+        .bet-card.vip { 
+            border: 2px solid var(--championship-gold); 
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.15), transparent); 
+            position: relative;
+        }
+        
+        .vip-badge {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--championship-gold);
+            color: black;
+            font-size: 0.6rem;
+            font-weight: 900;
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+        
+        .bet-odds { font-size: 1.6rem; font-weight: 900; color: white; margin-bottom: 5px; }
+        .bet-label { font-size: 0.75rem; color: var(--chalk-gray); margin-bottom: 15px; }
+        .bet-btn { 
+            font-size: 0.8rem; 
+            font-weight: 900; 
+            padding: 10px 0; 
+            border-radius: 25px; 
+            border: none; 
+            background: var(--ring-red); 
+            color: white; 
+            width: 100%; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        
+        .bet-btn:hover { opacity: 0.9; }
+        .vip .bet-btn { background: var(--championship-gold); color: black; }
+
+        /* TABS - BOXING STYLE */
+        .nav-tabs { 
+            display: flex; 
+            background: var(--ring-post); 
+            padding: 0 5px; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            overflow-x: auto;
+            position: sticky;
+            top: 73px;
+            z-index: 90;
+            backdrop-filter: blur(5px);
+        }
+        
+        .tab { 
+            padding: 18px 20px; 
+            color: var(--chalk-gray); 
+            font-weight: 800; 
+            font-size: 0.9rem; 
+            cursor: pointer; 
+            white-space: nowrap; 
+            border-bottom: 3px solid transparent; 
+            transition: 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .tab.active { 
+            color: white; 
+            border-bottom: 3px solid var(--championship-gold);
+            background: rgba(255, 215, 0, 0.05);
+        }
+        
+        .tab-notification {
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            background: var(--ring-red);
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        /* SECTIONS */
+        .view-section { display: none; padding: 20px; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        /* --- BETTING ENGINE --- */
+        
+        /* Live Match - BOXING BOUT */
+        .bout-header { 
+            text-align: center; 
+            margin-bottom: 20px; 
+            color: var(--championship-gold); 
+            font-size: 0.85rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            font-weight: 900; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .live-indicator {
+            background: var(--ring-red);
+            color: white;
+            font-size: 0.6rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 900;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .bout-container { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-bottom: 25px; 
+        }
+        
+        .bout-card { 
+            background: var(--ring-post); 
+            padding: 20px 15px; 
+            text-align: center; 
+            border-radius: 16px; 
+            border: 2px solid rgba(255,255,255,0.1); 
+            position: relative;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .bout-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .bc-red { border-top: 5px solid var(--ring-red); }
+        .bc-blue { border-top: 5px solid var(--ring-blue); }
+        
+        .bet-percentage {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+        }
+        
+        .bc-red .bet-percentage { color: var(--ring-red); }
+        .bc-blue .bet-percentage { color: var(--ring-blue); }
+        
+        .fighter-avatar { 
+            width: 80px; 
+            height: 80px; 
+            background-size: cover; 
+            margin: 0 auto 15px; 
+            border-radius: 50%; 
+            border: 4px solid var(--mat-black); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .fighter-record {
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--mat-black);
+            color: var(--championship-gold);
+            font-size: 0.6rem;
+            font-weight: 900;
+            padding: 2px 8px;
+            border-radius: 10px;
+            border: 1px solid var(--championship-gold);
+        }
+        
+        .fighter-name { 
+            font-family: var(--font-champion); 
+            font-size: 1.6rem; 
+            line-height: 1; 
+            margin: 0; 
+            text-transform: uppercase; 
+            color: white;
+        }
+        
+        .fighter-stats { 
+            font-size: 0.75rem; 
+            color: var(--chalk-gray); 
+            margin-bottom: 15px; 
+            font-weight: 600;
+        }
+        
+        .bet-progress {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        
+        .bet-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1s ease-out;
+        }
+        
+        .bc-red .bet-fill { background: var(--ring-red); }
+        .bc-blue .bet-fill { background: var(--ring-blue); }
+        
+        .bet-btn-lg { 
+            width: 100%; 
+            padding: 12px; 
+            font-weight: 900; 
+            border: none; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            border-radius: 10px; 
+            font-size: 0.85rem; 
+            color: white; 
+            transition: 0.2s;
+        }
+        
+        .bet-btn-lg:active { transform: scale(0.98); }
+        .btn-red { 
+            background: var(--ring-red); 
+            box-shadow: 0 0 15px rgba(220, 20, 60, 0.3);
+        }
+        
+        .btn-blue { 
+            background: var(--ring-blue); 
+            box-shadow: 0 0 15px rgba(65, 105, 225, 0.3);
+        }
+
+        /* Prop Bet Grid */
+        .grid-header { 
+            font-size: 1rem; 
+            font-weight: 900; 
+            color: white; 
+            margin: 30px 0 20px; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            padding-bottom: 12px; 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .prop-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+        }
+        
+        .prop-card { 
+            background: var(--ring-post); 
+            padding: 15px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            cursor: pointer; 
+            transition: 0.2s; 
+            backdrop-filter: blur(5px);
+        }
+        
+        .prop-card:active { transform: scale(0.98); }
+        .prop-card.active { border-color: var(--championship-gold); background: rgba(255, 215, 0, 0.05); }
+        
+        .prop-odds {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--mat-black);
+            color: var(--championship-gold);
+            font-family: var(--font-mono);
+            font-weight: 900;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            border: 1px solid var(--championship-gold);
+        }
+        
+        .prop-content { flex: 1; }
+        .prop-title { font-weight: 900; font-size: 0.9rem; line-height: 1.1; color: white; }
+        .prop-meta { font-size: 0.7rem; color: var(--chalk-gray); margin-top: 5px; }
+        .prop-bet-icon { 
+            color: var(--championship-gold); 
+            font-size: 0.75rem; 
+            font-weight: 900;
+            border: 1px solid var(--championship-gold); 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            transition: 0.2s;
+        }
+        
+        .prop-bet-icon:hover { background: var(--championship-gold); color: black; }
+
+        /* HIGH ROLLER GRID */
+        .highroller-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+        }
+        
+        .hr-card { 
+            background: var(--ring-post); 
+            padding: 20px 15px; 
+            border-radius: 16px; 
+            text-align: center; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            cursor: pointer; 
+            transition: 0.2s;
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+        
+        .hr-card:active { transform: scale(0.98); }
+        .hr-rank {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--championship-gold);
+            color: black;
+            font-weight: 900;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        
+        .hr-avatar { 
+            width: 70px; 
+            height: 70px; 
+            background-color: var(--mat-black); 
+            border-radius: 50%; 
+            margin: 0 auto 15px; 
+            background-size: cover; 
+            border: 3px solid rgba(255,255,255,0.1); 
+            position: relative;
+        }
+        
+        .hr-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: var(--championship-gold);
+            color: black;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+        }
+        
+        .hr-name { 
+            font-weight: 900; 
+            font-size: 1rem; 
+            margin-bottom: 5px; 
+            color: white; 
+        }
+        
+        .hr-stats { 
+            font-size: 0.75rem; 
+            color: var(--chalk-gray); 
+            text-transform: uppercase; 
+            margin-bottom: 10px; 
+            font-weight: 600; 
+        }
+        
+        .hr-tip {
+            font-size: 0.7rem;
+            color: var(--championship-gold);
+            background: rgba(255, 215, 0, 0.1);
+            padding: 5px 8px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .follow-btn { 
+            background: transparent; 
+            border: 1px solid var(--championship-gold); 
+            color: var(--championship-gold); 
+            padding: 8px 15px; 
+            border-radius: 25px; 
+            font-size: 0.8rem; 
+            font-weight: 900; 
+            transition: 0.2s;
+            width: 100%;
+        }
+        
+        .follow-btn:hover { background: var(--championship-gold); color: black; }
+
+        /* PROP BET SECTION */
+        .prop-card-lg { 
+            background: var(--ring-post); 
+            padding: 18px; 
+            border-radius: 12px; 
+            margin-bottom: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); 
+            display: flex; 
+            gap: 15px; 
+            transition: 0.2s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .prop-card-lg:active { transform: scale(0.99); }
+        .upvote-box { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-width: 45px; 
+            justify-content: center; 
+        }
+        
+        .arrow { 
+            font-size: 1.4rem; 
+            color: var(--chalk-gray); 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        
+        .arrow:active { transform: scale(1.2); }
+        .arrow.active { color: var(--championship-gold); }
+        .count { 
+            font-weight: 900; 
+            font-size: 1rem; 
+            margin-top: 5px; 
+            color: white;
+        }
+
+        /* FOOTER NAV - BOXING STYLE */
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; 
+            width: 100%; 
+            max-width: 480px; 
+            background: rgba(0, 8, 20, 0.95); 
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 215, 0, 0.3); 
+            display: flex; 
+            justify-content: space-around; 
+            padding: 15px 0; 
+            z-index: 100; 
+            box-shadow: 0 -5px 30px rgba(0,0,0,0.3); 
+        }
+        
+        .nav-item { 
+            text-align: center; 
+            color: var(--chalk-gray); 
+            font-size: 0.7rem; 
+            cursor: pointer; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 6px; 
+            font-weight: 800; 
+            position: relative;
+            transition: 0.2s;
+        }
+        
+        .nav-item:active { transform: scale(0.95); }
+        .nav-item.active { color: white; }
+        .nav-item i { font-size: 1.4rem; }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--ring-red);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 900;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* QUICK ACTIONS FAB */
+        .quick-action-fab {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-champion);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 25px rgba(255, 215, 0, 0.5);
+            z-index: 99;
+            transition: 0.3s;
+        }
+        
+        .quick-action-fab:active { 
+            transform: scale(0.9); 
+            box-shadow: 0 2px 15px rgba(255, 215, 0, 0.7);
+        }
+
+        /* --- MODALS --- */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            z-index: 200; 
+            justify-content: center; 
+            align-items: center; 
+            backdrop-filter: blur(10px); 
+        }
+        
+        .modal-box { 
+            width: 90%; 
+            max-width: 400px; 
+            background: var(--gradient-card); 
+            padding: 0; 
+            border-radius: 20px; 
+            position: relative; 
+            border-top: 5px solid var(--championship-gold); 
+            animation: slideUp 0.3s; 
+            overflow: hidden; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(10px);
+        }
+        
+        .m-header { 
+            padding: 25px 20px; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            position: relative; 
+            text-align: center; 
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .m-title { 
+            margin: 0; 
+            color: white; 
+            font-size: 1.4rem; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+        }
+        
+        .m-close { 
+            position: absolute; 
+            top: 20px; 
+            right: 25px; 
+            font-size: 2rem; 
+            color: var(--chalk-gray); 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        
+        .m-close:active { transform: scale(1.2); }
+        .m-body { padding: 30px; }
+
+        /* BET MODAL */
+        .bet-tabs { 
+            display: flex; 
+            background: var(--mat-black); 
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .b-tab { 
+            flex: 1; 
+            padding: 18px; 
+            text-align: center; 
+            font-size: 0.85rem; 
+            font-weight: 900; 
+            color: var(--chalk-gray); 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        
+        .b-tab:active { transform: scale(0.98); }
+        .b-tab.active { 
+            color: white; 
+            background: rgba(255, 215, 0, 0.2);
+            border-bottom: 3px solid var(--championship-gold); 
+        }
+        
+        .power-bet { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 20px; 
+            background: var(--mat-black); 
+            border: 2px solid rgba(255,255,255,0.1); 
+            border-radius: 12px; 
+            margin-bottom: 15px; 
+            cursor: pointer; 
+            transition: 0.2s; 
+        }
+        
+        .power-bet:active { transform: scale(0.98); }
+        .power-bet:hover, .power-bet.selected { 
+            border-color: var(--championship-gold); 
+            background: rgba(255, 215, 0, 0.1); 
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .submit-action { 
+            background: var(--gradient-champion); 
+            color: white; 
+            border: none; 
+            padding: 18px; 
+            width: 100%; 
+            font-weight: 900; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            margin-top: 15px; 
+            font-size: 1rem;
+            transition: 0.2s;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+        
+        .submit-action:active { transform: scale(0.98); }
+
+        /* PROFILE MODAL */
+        .profile-header-lg { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            margin-bottom: 25px; 
+        }
+        
+        .avatar-lg { 
+            width: 110px; 
+            height: 110px; 
+            background: var(--mat-black); 
+            border-radius: 50%; 
+            margin-bottom: 20px; 
+            background-size: cover; 
+            border: 4px solid rgba(255,255,255,0.1); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .goal-wrapper { 
+            width: 100%; 
+            margin: 25px 0 30px; 
+            text-align: left; 
+            background: var(--mat-black);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .goal-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
+        }
+        
+        .contribute-btn-mini { 
+            background: var(--championship-gold); 
+            color: black; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 20px; 
+            font-size: 0.75rem; 
+            font-weight: 900; 
+            cursor: pointer; 
+            transition: 0.2s;
+        }
+        
+        .contribute-btn-mini:active { transform: scale(0.95); }
+        .goal-bar-bg { 
+            width: 100%; 
+            height: 12px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 6px; 
+            overflow: hidden; 
+            margin-bottom: 10px; 
+        }
+        
+        .goal-fill { 
+            height: 100%; 
+            background: var(--gradient-champion); 
+            width: 0%; 
+            transition: width 1s ease-out; 
+        }
+
+        /* AGENDA LIST */
+        .agenda-list { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+            text-align: left; 
+        }
+        
+        .agenda-item { 
+            padding: 20px 0; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            color: white; 
+            display: flex; 
+            gap: 20px; 
+            align-items: flex-start;
+        }
+        
+        .agenda-item.current {
+            background: rgba(255, 215, 0, 0.05);
+            border-left: 5px solid var(--championship-gold);
+            margin-left: -30px;
+            padding-left: 25px;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .agenda-time { 
+            font-weight: 900; 
+            color: var(--championship-gold); 
+            white-space: nowrap; 
+            font-size: 1rem; 
+            min-width: 80px; 
+        }
+        
+        .agenda-desc { 
+            font-size: 0.95rem; 
+            font-weight: 600; 
+            flex: 1;
+        }
+        
+        .current-session {
+            display: inline-block;
+            background: var(--championship-gold);
+            color: black;
+            font-size: 0.7rem;
+            font-weight: 900;
+            padding: 3px 10px;
+            border-radius: 10px;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        /* BET SLIP TEXTAREA */
+        .bet-slip-input {
+            width: 100%;
+            height: 120px;
+            background: var(--mat-black);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 15px;
+            color: white;
+            font-family: var(--font-sport);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            resize: none;
+        }
+
+        /* STAKE SELECTION */
+        .stake-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stake-chip {
+            background: var(--mat-black);
+            border: 2px solid rgba(255,255,255,0.1);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .stake-chip:hover {
+            border-color: var(--championship-gold);
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .stake-chip.selected {
+            border-color: var(--championship-gold);
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--championship-gold);
+        }
+
+        /* PAYOUT CALCULATOR */
+        .payout-calculator {
+            background: var(--mat-black);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .payout-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .payout-row.total {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 10px;
+            margin-top: 10px;
+            font-size: 1.1rem;
+            font-weight: 900;
+        }
+        
+        .win-amount {
+            color: var(--tape-green);
+            font-weight: 900;
+        }
+        
+        .gold-text {
+            color: var(--championship-gold);
+            font-weight: 900;
+        }
+
+        /* CONFETTI ANIMATION */
+        .confetti-animation {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            font-size: 1.5rem;
+            animation: confettiFall 2s ease-out forwards;
+        }
+        
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        @keyframes slideUp { 
+            from { transform: translateY(30px); opacity: 0; } 
+            to { transform: translateY(0); opacity: 1; } 
+        }
+        
+        @keyframes pulse { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.6; } 
+        }
+        
+        /* COMPLIANCE FOOTER */
+        .compliance-footer {
+            background: var(--mat-black);
+            padding: 20px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--chalk-gray);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 30px;
+        }
+        
+        .compliance-footer p {
+            margin: 5px 0;
+        }
+        
+        .compliance-links {
+            margin-top: 10px;
+        }
+        
+        .compliance-links a {
+            color: var(--championship-gold);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        /* TOAST NOTIFICATION */
+        .toast {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--championship-gold);
+            color: black;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 900;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(0); opacity: 1; }
+            to { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+<div class="app-container">
+    <!-- LIVE EVENT HEADER -->
+    <div class="live-event-header">
+        <div class="logo">
+            <i class="fas fa-boxing-glove"></i> SPORTS <span class="gold">CLASH</span> OS
+            <span class="event-tag">🥊 Paul vs Joshua</span>
+        </div>
+        <div class="live-status">
+            <div class="live-timer" id="liveTimer">UNDERCARD LIVE</div>
+            <div class="live-badge"><i class="fas fa-circle"></i> MAIN EVENT 10PM ET</div>
+        </div>
+    </div>
+
+    <!-- LIVE ANNOUNCEMENT TICKER -->
+    <div class="announcement-ticker">
+        <div class="ticker-content" id="announcementTicker">
+            <!-- Ticker content will be populated by JS -->
+        </div>
+    </div>
+
+    <!-- HERO DASHBOARD LIVE -->
+    <div class="hero-dashboard-live">
+        <div class="hero-sub">HEAVYWEIGHT SHOWDOWN • AUG 15 • MSG</div>
+        <h1 class="hero-title">
+            <span class="fighter red">JAKE PAUL</span>
+            <span class="vs">VS</span>
+            <span class="fighter blue">ANTHONY JOSHUA</span>
+        </h1>
+        
+        <div class="odds-display">
+            <div class="odds-box red">
+                <div class="odds-label">Paul Moneyline</div>
+                <div class="odds-value positive" id="paulOdds">+450</div>
+            </div>
+            <div class="odds-box blue">
+                <div class="odds-label">Joshua Moneyline</div>
+                <div class="odds-value negative" id="joshuaOdds">-650</div>
+            </div>
+        </div>
+
+        <div class="live-stats">
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-value" id="liveBettors">45.2K</div>
+                <div class="stat-label">Live Bettors</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="stat-value" id="totalPot">$2.8M</div>
+                <div class="stat-label">Total Pot</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-icon"><i class="fas fa-stopwatch"></i></div>
+                <div class="stat-value" id="roundTimer">R5 2:15</div>
+                <div class="stat-label">Round Clock</div>
+            </div>
+        </div>
+
+        <button class="main-cta-btn" onclick="openModal('depositModal')">
+            <i class="fas fa-wallet"></i> DEPOSIT & BET NOW
+        </button>
+    </div>
+
+    <!-- QUICK BET SECTION -->
+    <div class="bet-section">
+        <div class="section-header">
+            <i class="fas fa-bolt"></i> QUICK BETS
+        </div>
+        <div class="bet-row">
+            <div class="bet-card" onclick="openBetModal('paul', 'moneyline', '+450')">
+                <div class="bet-odds">+450</div>
+                <div class="bet-label">Paul Moneyline</div>
+                <button class="bet-btn">BET</button>
+            </div>
+            <div class="bet-card" onclick="openBetModal('joshua', 'moneyline', '-650')">
+                <div class="bet-odds">-650</div>
+                <div class="bet-label">Joshua Moneyline</div>
+                <button class="bet-btn">BET</button>
+            </div>
+            <div class="bet-card vip" onclick="openBetModal('ko', 'method', '+350')">
+                <div class="vip-badge">HOT</div>
+                <div class="bet-odds">+350</div>
+                <div class="bet-label">KO in Round 1-3</div>
+                <button class="bet-btn">BET</button>
+            </div>
+            <div class="bet-card" onclick="openBetModal('over', 'rounds', '+120')">
+                <div class="bet-odds">+120</div>
+                <div class="bet-label">Over 7.5 Rounds</div>
+                <button class="bet-btn">BET</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAV TABS -->
+    <div class="nav-tabs">
+        <div class="tab active" onclick="switchTab('main', this)">
+            <i class="fas fa-boxing-glove"></i> MAIN EVENT
+            <div class="tab-notification" id="mainNotification"></div>
+        </div>
+        <div class="tab" onclick="switchTab('highrollers', this)">
+            <i class="fas fa-crown"></i> HIGH ROLLERS
+            <div class="tab-notification" id="highrollerNotification"></div>
+        </div>
+        <div class="tab" onclick="switchTab('props', this)">
+            <i class="fas fa-lightbulb"></i> PROP BETS
+            <div class="tab-notification" id="propsNotification"></div>
+        </div>
+    </div>
+
+    <!-- TAB 1: MAIN EVENT -->
+    <div id="main" class="view-section active">
+        <!-- Live Bout -->
+        <div class="bout-header">
+            <div class="live-indicator">LIVE ROUND 5</div>
+            <span id="currentRound">MAIN EVENT • 10PM ET</span>
+        </div>
+        <div class="bout-container">
+            <div class="bout-card bc-red">
+                <div class="bet-percentage" id="betRed">38%</div>
+                <div class="fighter-avatar" style="background-image: url('https://images.unsplash.com/photo-1542262868-cec49cce6571?w=300');">
+                    <div class="fighter-record">9-1-0</div>
+                </div>
+                <h3 class="fighter-name">JAKE PAUL</h3>
+                <div class="fighter-stats">
+                    <span>26yrs • 6'1" • 200lbs</span>
+                    <span>KO: 8 wins</span>
+                </div>
+                <div class="bet-progress">
+                    <div class="bet-fill" id="progressRed" style="width: 38%"></div>
+                </div>
+                <button class="bet-btn-lg btn-red" onclick="openBetModal('JAKE PAUL', 'moneyline', '+450', 'red')">
+                    <i class="fas fa-hand-holding-usd"></i> BET ON PAUL
+                </button>
+            </div>
+            <div class="bout-card bc-blue">
+                <div class="bet-percentage" id="betBlue">62%</div>
+                <div class="fighter-avatar" style="background-image: url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300');">
+                    <div class="fighter-record">28-3-0</div>
+                </div>
+                <h3 class="fighter-name">ANTHONY JOSHUA</h3>
+                <div class="fighter-stats">
+                    <span>34yrs • 6'6" • 250lbs</span>
+                    <span>KO: 24 wins</span>
+                </div>
+                <div class="bet-progress">
+                    <div class="bet-fill" id="progressBlue" style="width: 62%"></div>
+                </div>
+                <button class="bet-btn-lg btn-blue" onclick="openBetModal('ANTHONY JOSHUA', 'moneyline', '-650', 'blue')">
+                    <i class="fas fa-hand-holding-usd"></i> BET ON JOSHUA
+                </button>
+            </div>
+        </div>
+
+        <!-- Popular Prop Bets -->
+        <div class="grid-header">
+            POPULAR PROP BETS
+            <span style="font-size:0.8rem; color:var(--chalk-gray);">HOTTEST MARKETS</span>
+        </div>
+        <div class="prop-grid" id="propGrid">
+            <!-- Prop bets populated by JS -->
+        </div>
+    </div>
+
+    <!-- TAB 2: HIGH ROLLERS -->
+    <div id="highrollers" class="view-section">
+        <div class="grid-header">
+            HIGH ROLLER LOUNGE
+            <span style="font-size:0.8rem; color:var(--chalk-gray);" id="highrollerCount">24 ACTIVE • $1.2M IN BETS</span>
+        </div>
+        <div class="highroller-grid" id="highrollerGrid">
+            <!-- High roller cards populated by JS -->
+        </div>
+    </div>
+
+    <!-- TAB 3: PROP BETS -->
+    <div id="props" class="view-section">
+        <button class="main-cta-btn" style="margin-bottom:25px; padding:15px;" onclick="openModal('createPropModal')">
+            <i class="fas fa-plus"></i> CREATE PROP BET
+        </button>
+        
+        <div id="propsContainer">
+            <!-- User prop bets populated by JS -->
+        </div>
+    </div>
+
+    <!-- QUICK ACTION FAB -->
+    <div class="quick-action-fab" onclick="openQuickActions()">
+        <i class="fas fa-bolt"></i>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('main', this)">
+            <i class="fas fa-boxing-glove"></i>
+            MAIN EVENT
+            <div class="notification-badge" id="navMainBadge">3</div>
+        </div>
+        <div class="nav-item" onclick="openModal('agendaModal')">
+            <i class="far fa-calendar-alt"></i>
+            FIGHT CARD
+        </div>
+        <div class="nav-item" onclick="switchTab('highrollers', this)">
+            <i class="fas fa-crown"></i>
+            HIGH ROLLERS
+            <div class="notification-badge" id="navHighrollerBadge">5</div>
+        </div>
+        <div class="nav-item" onclick="openModal('profileModal')">
+            <i class="fas fa-user-circle"></i>
+            MY BETS
+        </div>
+    </div>
+    
+    <!-- COMPLIANCE FOOTER -->
+    <div class="compliance-footer">
+        <p>21+ | Gambling Problem? Call 1-800-GAMBLER</p>
+        <p>AZ/CO/CT/IL/IN/IA/LA/MI/NJ/NY/PA/TN/VA/WV/WY only</p>
+        <p>Valid where prohibited. Please bet responsibly.</p>
+        <div class="compliance-links">
+            <a href="/terms">Terms</a> |
+            <a href="/privacy">Privacy</a> |
+            <a href="/responsible-betting">Responsible Betting</a> |
+            <a href="/self-exclusion">Self Exclusion</a>
+        </div>
+    </div>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- BET MODAL -->
+<div id="betModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">PLACE YOUR BET</div>
+            <div style="font-size:0.9rem; color:var(--chalk-gray); margin-top:8px;">
+                Betting on: <span id="betTarget" style="color:white; font-weight:900; font-size:1.1rem;">TARGET</span>
+                <div style="font-size:0.8rem;" id="betType">Moneyline (+450)</div>
+            </div>
+            <span class="m-close" onclick="closeModal('betModal')">&times;</span>
+        </div>
+        <div class="bet-tabs">
+            <div class="b-tab active" onclick="switchBetTab('stake', this)">SET STAKE</div>
+            <div class="b-tab" onclick="switchBetTab('parlay', this)">BUILD PARLAY</div>
+        </div>
+        <div class="m-body">
+            <div id="stakeSection">
+                <div class="stake-selector">
+                    <div class="stake-chip" onclick="setStake(10)">$10</div>
+                    <div class="stake-chip" onclick="setStake(25)">$25</div>
+                    <div class="stake-chip" onclick="setStake(50)">$50</div>
+                    <div class="stake-chip" onclick="setStake(100)">$100</div>
+                    <div class="stake-chip" onclick="setStake(250)">$250</div>
+                    <div class="stake-chip" onclick="setStake(500)">$500</div>
+                </div>
+                
+                <div style="margin:20px 0;">
+                    <label style="display:block; margin-bottom:10px; color:var(--chalk-gray); font-weight:600;">
+                        Custom Stake
+                    </label>
+                    <div style="display:flex; align-items:center; background:var(--mat-black); border-radius:8px; padding:5px 15px;">
+                        <span style="color:var(--championship-gold); font-weight:900; margin-right:10px;">$</span>
+                        <input type="number" id="customStake" placeholder="Enter amount" 
+                               style="background:none; border:none; color:white; font-size:1.5rem; width:100%; font-weight:900;"
+                               min="5" max="10000" oninput="updatePayout()">
+                    </div>
+                </div>
+                
+                <div class="payout-calculator">
+                    <div class="payout-row">
+                        <span>Stake:</span>
+                        <span id="stakeAmount">$0.00</span>
+                    </div>
+                    <div class="payout-row">
+                        <span>Odds:</span>
+                        <span id="betOdds">+450</span>
+                    </div>
+                    <div class="payout-row">
+                        <span>Potential Win:</span>
+                        <span id="potentialWin" class="win-amount">$0.00</span>
+                    </div>
+                    <div class="payout-row total">
+                        <span>Total Payout:</span>
+                        <span id="totalPayout" class="gold-text">$0.00</span>
+                    </div>
+                </div>
+                
+                <button class="submit-action" onclick="placeBet()">
+                    <i class="fas fa-lock"></i> CONFIRM BET
+                </button>
+            </div>
+            
+            <div id="parlaySection" style="display:none;">
+                <p style="color:var(--chalk-gray); font-size:0.95rem; margin-bottom:25px; text-align:center;">
+                    Add more legs to increase your potential payout.
+                </p>
+                <div class="power-bet" onclick="addParlayLeg('Paul by KO', '+450')">
+                    <span><strong>Paul by KO</strong><br><small>+450</small></span>
+                    <span style="color:var(--championship-gold); font-weight:900;">+</span>
+                </div>
+                <div class="power-bet" onclick="addParlayLeg('Joshua Decision', '+150')">
+                    <span><strong>Joshua by Decision</strong><br><small>+150</small></span>
+                    <span style="color:var(--championship-gold); font-weight:900;">+</span>
+                </div>
+                <div class="power-bet" onclick="addParlayLeg('Fight goes distance', '+120')">
+                    <span><strong>Fight goes distance</strong><br><small>+120</small></span>
+                    <span style="color:var(--championship-gold); font-weight:900;">+</span>
+                </div>
+                
+                <div id="parlayLegs" style="background:var(--mat-black); padding:15px; border-radius:8px; margin:15px 0;"></div>
+                
+                <button class="submit-action" onclick="placeParlay()">
+                    <i class="fas fa-layer-group"></i> PLACE PARLAY
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- AGENDA MODAL -->
+<div id="agendaModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">FIGHT CARD SCHEDULE</div>
+            <span class="m-close" onclick="closeModal('agendaModal')">&times;</span>
+        </div>
+        <div class="m-body" style="padding:0 30px 30px;">
+            <ul class="agenda-list" id="agendaList">
+                <!-- Agenda populated by JS -->
+            </ul>
+            <button class="submit-action" style="margin-top:25px;" onclick="closeModal('agendaModal')">
+                CLOSE SCHEDULE
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div id="profileModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">MY BETTING PROFILE</div>
+            <span class="m-close" onclick="closeModal('profileModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <div class="profile-header-lg">
+                <div id="pAvatar" class="avatar-lg"></div>
+                <h2 id="pName" style="margin:0; font-size:1.5rem; color:white;">@BetMaster</h2>
+                <p id="pRole" style="color:var(--chalk-gray); margin:8px 0 0; font-size:0.9rem;">High Roller Tier • 68% Win Rate</p>
+                <div style="margin-top:10px;">
+                    <span style="background:var(--championship-gold); color:black; padding:4px 12px; border-radius:20px; font-size:0.7rem; font-weight:900;">
+                        <i class="fas fa-crown"></i> HIGH ROLLER LOUNGE
+                    </span>
+                </div>
+            </div>
+            <div class="goal-wrapper">
+                <div class="goal-header">
+                    <span class="goal-title" style="font-weight:900; color:white;">Bankroll: $2,450</span>
+                    <button class="contribute-btn-mini" onclick="openModal('depositModal')">
+                        <i class="fas fa-plus"></i> DEPOSIT
+                    </button>
+                </div>
+                <div class="goal-bar-bg">
+                    <div id="pGoalFill" class="goal-fill" style="width: 65%"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--chalk-gray); margin-top:5px;">
+                    <span>Today's Profit: <strong style="color:var(--tape-green);" id="raisedAmount">+$425</strong></span>
+                    <span>All Time: <strong style="color:var(--championship-gold);">+$12,850</strong></span>
+                </div>
+            </div>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+                <div style="background:var(--mat-black); padding:15px; border-radius:12px; text-align:center;">
+                    <div style="font-size:0.8rem; color:var(--chalk-gray);">Active Bets</div>
+                    <div style="font-size:1.5rem; font-weight:900; color:white;">3</div>
+                </div>
+                <div style="background:var(--mat-black); padding:15px; border-radius:12px; text-align:center;">
+                    <div style="font-size:0.8rem; color:var(--chalk-gray);">Win Rate</div>
+                    <div style="font-size:1.5rem; font-weight:900; color:var(--tape-green);">68%</div>
+                </div>
+            </div>
+            
+            <button class="submit-action" id="connectButton" onclick="openModal('myBetsModal')" style="margin-bottom:15px;">
+                <i class="fas fa-list"></i> VIEW MY BETS
+            </button>
+            
+            <div style="text-align:center; font-size:0.9rem; color:var(--championship-gold); font-weight:900; cursor:pointer; padding:12px; border:2px solid rgba(255,255,255,0.1); border-radius:12px;" 
+                 onclick="openModal('responsibleModal')">
+                <i class="fas fa-shield-alt"></i> RESPONSIBLE BETTING TOOLS
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DEPOSIT MODAL -->
+<div id="depositModal" class="modal">
+    <div class="modal-box" style="border-top-color: var(--championship-gold);">
+        <div class="m-header">
+            <div class="m-title" style="color:var(--championship-gold);">DEPOSIT FUNDS</div>
+            <span class="m-close" onclick="closeModal('depositModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <div style="text-align:center;">
+                <p style="color:var(--chalk-gray); margin-bottom:25px; font-size:0.9rem; text-align:center;">
+                    Add funds to start betting on Paul vs Joshua.
+                </p>
+                
+                <div class="tier-option" onclick="selectDeposit(100)">
+                    <div style="font-size:2rem; font-weight:900; color:var(--championship-gold); margin-bottom:10px;">$100</div>
+                    <div style="font-weight:bold; margin-bottom:5px;">Starter Pack</div>
+                    <div style="font-size:0.8rem; color:var(--chalk-gray);">Get $10 free bet bonus</div>
+                </div>
+                
+                <div class="tier-option" onclick="selectDeposit(250)">
+                    <div style="font-size:2rem; font-weight:900; color:var(--championship-gold); margin-bottom:10px;">$250</div>
+                    <div style="font-weight:bold; margin-bottom:5px;">Premium Pack</div>
+                    <div style="font-size:0.8rem; color:var(--chalk-gray);">Get $50 free bet + VIP access</div>
+                </div>
+                
+                <div class="tier-option" onclick="selectDeposit(500)">
+                    <div style="font-size:2rem; font-weight:900; color:var(--championship-gold); margin-bottom:10px;">$500</div>
+                    <div style="font-weight:bold; margin-bottom:5px;">High Roller</div>
+                    <div style="font-size:0.8rem; color:var(--chalk-gray);">Get $100 free bet + early odds</div>
+                </div>
+                
+                <div style="margin-top:20px; background:var(--mat-black); padding:15px; border-radius:12px;">
+                    <div style="display:flex; align-items:center; margin-bottom:10px;">
+                        <input type="number" id="customDeposit" placeholder="Custom amount" 
+                               style="background:none; border:none; color:white; font-size:1.2rem; width:100%; padding:10px;"
+                               min="20" max="5000">
+                    </div>
+                    <div style="font-size:0.8rem; color:var(--chalk-gray);">
+                        Minimum: $20 | Maximum: $5,000
+                    </div>
+                </div>
+                
+                <button class="submit-action" style="margin-top:20px;" 
+                        onclick="processDeposit()" id="depositBtn">
+                    <i class="fas fa-lock"></i> SECURE DEPOSIT
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CREATE PROP BET MODAL -->
+<div id="createPropModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">CREATE PROP BET</div>
+            <span class="m-close" onclick="closeModal('createPropModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <textarea class="bet-slip-input" id="propInput" placeholder="Create your own prop bet... (e.g., 'Paul wins by KO in Round 3')"></textarea>
+            
+            <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:10px; color:var(--chalk-gray); font-weight:600;">
+                    Set Your Odds
+                </label>
+                <div style="display:flex; gap:10px;">
+                    <div style="flex:1; background:var(--mat-black); padding:15px; border-radius:8px; text-align:center;">
+                        <div style="font-size:0.8rem; color:var(--chalk-gray);">Yes</div>
+                        <input type="number" id="yesOdds" placeholder="+400" 
+                               style="background:none; border:none; color:white; font-size:1.5rem; width:100%; text-align:center; font-weight:900;">
+                    </div>
+                    <div style="flex:1; background:var(--mat-black); padding:15px; border-radius:8px; text-align:center;">
+                        <div style="font-size:0.8rem; color:var(--chalk-gray);">No</div>
+                        <input type="number" id="noOdds" placeholder="-200" 
+                               style="background:none; border:none; color:white; font-size:1.5rem; width:100%; text-align:center; font-weight:900;">
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <label style="display:flex; align-items:center; font-size:0.8rem; flex:1;">
+                    <input type="checkbox" id="anonymousCheck" style="margin-right:8px;">
+                    Create anonymously
+                </label>
+                <label style="display:flex; align-items:center; font-size:0.8rem; flex:1;">
+                    <input type="checkbox" id="publicCheck" style="margin-right:8px;">
+                    Public market
+                </label>
+            </div>
+            
+            <button class="submit-action" onclick="createPropBet()">
+                <i class="fas fa-paper-plane"></i> CREATE PROP MARKET
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div id="payModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title">SECURE PAYMENT</div>
+            <span class="m-close" onclick="closeModal('payModal')">&times;</span>
+        </div>
+        <div class="m-body" style="text-align:center;">
+            <h3 id="paymentTitle" style="margin-bottom:20px;">Deposit to Sports Clash OS</h3>
+            <div style="font-size:3rem; font-weight:900; margin:20px 0; color:var(--championship-gold);">
+                $<span id="payAmount">100</span>
+            </div>
+            <p style="font-size:0.85rem; color:var(--chalk-gray); margin-bottom:25px;">
+                Secure checkout via Stripe • 256-bit encryption
+            </p>
+            
+            <div style="background:var(--mat-black); padding:20px; border-radius:12px; margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span>Deposit:</span>
+                    <span id="paymentItem" style="font-weight:bold;">$100.00</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span>Processing fee:</span>
+                    <span id="paymentFee" style="font-weight:bold;">$0.00</span>
+                </div>
+                <hr style="border-color:var(--chalk-gray); margin:15px 0; opacity:0.2;">
+                <div style="display:flex; justify-content:space-between; font-size:1.1rem; font-weight:bold;">
+                    <span>Total:</span>
+                    <span id="paymentTotal" style="color:var(--championship-gold);">$100.00</span>
+                </div>
+            </div>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+                <div style="background:var(--mat-black); padding:15px; border-radius:8px; text-align:center; cursor:pointer;" onclick="selectPayment('card')">
+                    <i class="fas fa-credit-card" style="font-size:1.5rem; margin-bottom:10px; color:var(--championship-gold);"></i>
+                    <div style="font-size:0.8rem; font-weight:600;">Credit Card</div>
+                </div>
+                <div style="background:var(--mat-black); padding:15px; border-radius:8px; text-align:center; cursor:pointer;" onclick="selectPayment('crypto')">
+                    <i class="fas fa-coins" style="font-size:1.5rem; margin-bottom:10px; color:var(--championship-gold);"></i>
+                    <div style="font-size:0.8rem; font-weight:600;">Crypto</div>
+                </div>
+            </div>
+            
+            <button class="submit-action" onclick="processPayment()">
+                <i class="fas fa-lock"></i> CONFIRM & PAY
+            </button>
+            
+            <p style="font-size:0.7rem; color:var(--chalk-gray); margin-top:15px;">
+                By completing this deposit, you confirm you are 21+ and agree to our Terms of Service
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- RESPONSIBLE BETTING MODAL -->
+<div id="responsibleModal" class="modal">
+    <div class="modal-box">
+        <div class="m-header">
+            <div class="m-title" style="color:var(--tape-green);">
+                <i class="fas fa-shield-alt"></i> RESPONSIBLE BETTING
+            </div>
+            <span class="m-close" onclick="closeModal('responsibleModal')">&times;</span>
+        </div>
+        <div class="m-body">
+            <div style="text-align:center; margin-bottom:25px;">
+                <i class="fas fa-heart" style="font-size:3rem; color:var(--ring-red); margin-bottom:15px;"></i>
+                <h3 style="color:white; margin-bottom:10px;">Bet Responsibly</h3>
+                <p style="color:var(--chalk-gray);">Set limits to stay in control</p>
+            </div>
+            
+            <div class="power-bet" onclick="setLimit('deposit', 100)">
+                <span><strong>Deposit Limit</strong><br><small>Maximum $100/day</small></span>
+                <span style="color:var(--championship-gold); font-weight:900;">SET</span>
+            </div>
+            
+            <div class="power-bet" onclick="setLimit('loss', 50)">
+                <span><strong>Loss Limit</strong><br><small>Maximum $50/day</small></span>
+                <span style="color:var(--championship-gold); font-weight:900;">SET</span>
+            </div>
+            
+            <div class="power-bet" onclick="setTimeout(24)">
+                <span><strong>Time Out</strong><br><small>Take a 24-hour break</small></span>
+                <span style="color:var(--championship-gold); font-weight:900;">SET</span>
+            </div>
+            
+            <div class="power-bet" onclick="selfExclude(30)">
+                <span><strong>Self Exclusion</strong><br><small>30-day break</small></span>
+                <span style="color:var(--championship-gold); font-weight:900;">SET</span>
+            </div>
+            
+            <div style="background:var(--mat-black); padding:20px; border-radius:12px; margin:20px 0; text-align:center;">
+                <p style="color:var(--chalk-gray); font-size:0.9rem; margin-bottom:10px;">
+                    If you or someone you know has a gambling problem, help is available.
+                </p>
+                <div style="color:var(--tape-green); font-weight:900; font-size:1.2rem;">
+                    1-800-522-4700
+                </div>
+            </div>
+            
+            <button class="submit-action" style="background:var(--tape-green);" onclick="closeModal('responsibleModal')">
+                <i class="fas fa-check"></i> GOT IT
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ============ GLOBAL STATE ============
+    const state = {
+        // Betting state
+        bets: {
+            'JAKE PAUL': { amount: 452000, percentage: 38, color: 'red', odds: '+450' },
+            'ANTHONY JOSHUA': { amount: 738000, percentage: 62, color: 'blue', odds: '-650' },
+            'PAUL KO R1-3': { amount: 0, percentage: 0, color: 'red', odds: '+350' },
+            'JOSHUA DECISION': { amount: 0, percentage: 0, color: 'blue', odds: '+150' }
+        },
+        totalPot: 2800000,
+        liveBettors: 45200,
+        
+        // High Rollers state
+        highrollers: [
+            { id: 1, name: 'Vegas Vince', role: 'Boxing Specialist', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=250', profit: '+$82,450', tip: 'Taking Paul by decision', connected: false },
+            { id: 2, name: 'Money Mike', role: 'High Stakes', img: null, profit: '+$45,200', tip: 'Joshua KO in 6', connected: false },
+            { id: 3, name: 'Oracle Olivia', role: 'Prop Bet Queen', img: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=250', profit: '+$38,900', tip: 'Fight goes distance', connected: false },
+            { id: 4, name: 'Bankroll Ben', role: 'Risk Manager', img: null, profit: '+$25,500', tip: 'Under 7.5 rounds', connected: false }
+        ],
+        
+        // Prop Bets state
+        propBets: [
+            { id: 1, text: 'Paul wins by KO in Round 3', creator: '@KnockoutKing', time: '2m ago', votes: 142, odds: '+1200', betted: true, resolved: false },
+            { id: 2, text: 'Joshua wins by unanimous decision', creator: 'JudgeJudy', time: '15m ago', votes: 89, odds: '+150', betted: false, resolved: false },
+            { id: 3, text: 'Fight stopped due to cut', creator: 'Anonymous', time: '25m ago', votes: 67, odds: '+800', betted: false, resolved: false },
+            { id: 4, text: 'Both fighters knocked down', creator: '@ChaosTheory', time: '45m ago', votes: 124, odds: '+400', betted: true, resolved: true }
+        ],
+        
+        // Payment state
+        selectedDeposit: null,
+        selectedBet: null,
+        selectedBetType: '',
+        selectedBetOdds: '',
+        selectedBetColor: '',
+        currentStake: 0,
+        
+        // User state
+        user: {
+            name: '@BetMaster',
+            bankroll: 2450,
+            activeBets: 3,
+            winRate: 68,
+            totalProfit: 12850,
+            connected: []
+        },
+        
+        // Notifications
+        mainNotifications: 3,
+        highrollerNotifications: 5,
+        propsNotifications: 2
+    };
+
+    // ============ UTILITY FUNCTIONS ============
+    function formatNumber(num) {
+        if (num >= 1000000) {
+            return '$' + (num / 1000000).toFixed(1) + 'M';
+        }
+        if (num >= 1000) {
+            return '$' + (num / 1000).toFixed(1) + 'K';
+        }
+        return '$' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function formatCount(num) {
+        if (num >= 1000000) {
+            return (num / 1000000).toFixed(1) + 'M';
+        }
+        if (num >= 1000) {
+            return (num / 1000).toFixed(1) + 'K';
+        }
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    // Confetti animation function
+    function createConfettiAnimation(x, y) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-animation';
+        confetti.innerHTML = '🎉';
+        confetti.style.left = x + 'px';
+        confetti.style.top = y + 'px';
+        document.body.appendChild(confetti);
+        
+        setTimeout(() => {
+            if(confetti.parentNode) {
+                confetti.parentNode.removeChild(confetti);
+            }
+        }, 2000);
+    }
+    
+    // Calculate payout
+    function calculatePayout(stake, odds) {
+        const oddsNum = parseFloat(odds);
+        if (oddsNum > 0) {
+            return stake + (stake * (oddsNum / 100));
+        } else {
+            return stake + (stake * (100 / Math.abs(oddsNum)));
+        }
+    }
+
+    // ============ INITIALIZATION ============
+    document.addEventListener('DOMContentLoaded', function() {
+        initializePage();
+        startLiveUpdates();
+        updateNotificationBadges();
+    });
+
+    function initializePage() {
+        // Initialize prop bet grid
+        renderPropBets();
+        
+        // Initialize high roller grid
+        renderHighrollerGrid();
+        
+        // Initialize user prop bets
+        renderUserPropBets();
+        
+        // Initialize agenda
+        renderAgenda();
+        
+        // Initialize ticker
+        updateTicker();
+        
+        // Set initial round timer
+        updateRoundTimer();
+        
+        // Set initial odds
+        updateOddsDisplay();
+    }
+
+    // ============ NAVIGATION ============
+    function switchTab(id, el) {
+        document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(el) el.classList.add('active');
+        
+        // Clear notifications for this tab
+        if(id === 'main') {
+            state.mainNotifications = 0;
+            document.getElementById('mainNotification').style.display = 'none';
+            document.getElementById('navMainBadge').style.display = 'none';
+        } else if(id === 'highrollers') {
+            state.highrollerNotifications = 0;
+            document.getElementById('highrollerNotification').style.display = 'none';
+            document.getElementById('navHighrollerBadge').style.display = 'none';
+        } else if(id === 'props') {
+            state.propsNotifications = 0;
+            document.getElementById('propsNotification').style.display = 'none';
+        }
+        
+        updateNotificationBadges();
+    }
+
+    // ============ MODAL SYSTEM ============
+    function openModal(id, data) {
+        document.getElementById(id).style.display = 'flex';
+        
+        if(id === 'betModal' && state.selectedBet) {
+            document.getElementById('betTarget').innerText = state.selectedBet;
+            document.getElementById('betType').innerText = state.selectedBetType + ' (' + state.selectedBetOdds + ')';
+            document.getElementById('betOdds').innerText = state.selectedBetOdds;
+            
+            // Set initial stake to $25
+            setStake(25);
+        }
+        
+        if(id === 'profileModal' && data) {
+            openProfile(data.name, data.role, data.img, data.profit);
+        }
+    }
+
+    function closeModal(id) { 
+        document.getElementById(id).style.display = 'none'; 
+        
+        // Reset forms
+        if(id === 'createPropModal') {
+            document.getElementById('propInput').value = '';
+            document.getElementById('yesOdds').value = '';
+            document.getElementById('noOdds').value = '';
+        }
+    }
+    
+    function switchBetTab(type, el) {
+        document.querySelectorAll('.b-tab').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('stakeSection').style.display = type === 'stake' ? 'block' : 'none';
+        document.getElementById('parlaySection').style.display = type === 'parlay' ? 'block' : 'none';
+    }
+
+    // ============ BETTING SYSTEM ============
+    function openBetModal(name, type, odds, color) {
+        state.selectedBet = name;
+        state.selectedBetType = type;
+        state.selectedBetOdds = odds;
+        state.selectedBetColor = color;
+        switchBetTab('stake', document.querySelector('.b-tab'));
+        openModal('betModal');
+    }
+
+    function setStake(amount) {
+        state.currentStake = amount;
+        document.getElementById('customStake').value = amount;
+        
+        // Update chip selection
+        document.querySelectorAll('.stake-chip').forEach(chip => {
+            chip.classList.remove('selected');
+            if(parseInt(chip.textContent.replace('$', '')) === amount) {
+                chip.classList.add('selected');
+            }
+        });
+        
+        updatePayout();
+    }
+
+    function updatePayout() {
+        const stakeInput = document.getElementById('customStake');
+        let stake = parseFloat(stakeInput.value) || 0;
+        
+        if (stake < 5) stake = 5;
+        if (stake > 10000) stake = 10000;
+        
+        state.currentStake = stake;
+        stakeInput.value = stake;
+        
+        const odds = state.selectedBetOdds;
+        const payout = calculatePayout(stake, odds);
+        
+        document.getElementById('stakeAmount').textContent = '$' + stake.toFixed(2);
+        document.getElementById('potentialWin').textContent = '$' + (payout - stake).toFixed(2);
+        document.getElementById('totalPayout').textContent = '$' + payout.toFixed(2);
+    }
+
+    function placeBet() {
+        if(state.currentStake < 5) {
+            showToast('Minimum stake is $5');
+            return;
+        }
+        
+        if(state.currentStake > state.user.bankroll) {
+            showToast('Insufficient funds. Please deposit.');
+            openModal('depositModal');
+            return;
+        }
+        
+        const btn = document.querySelector('#betModal .submit-action');
+        const original = btn.innerHTML;
+        
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PLACING BET...';
+        btn.disabled = true;
+        
+        setTimeout(() => {
+            // Update user bankroll
+            state.user.bankroll -= state.currentStake;
+            state.user.activeBets += 1;
+            
+            // Update total pot
+            state.totalPot += state.currentStake * 100; // Multiply for display
+            
+            // Update bet percentages (simulate market movement)
+            if(state.selectedBet === 'JAKE PAUL') {
+                state.bets['JAKE PAUL'].amount += state.currentStake * 100;
+                state.bets['ANTHONY JOSHUA'].amount -= state.currentStake * 50;
+            } else {
+                state.bets['ANTHONY JOSHUA'].amount += state.currentStake * 100;
+                state.bets['JAKE PAUL'].amount -= state.currentStake * 50;
+            }
+            
+            updateBetPercentages();
+            updateBetUI();
+            
+            // Show success
+            showToast('✅ Bet placed! Good luck!');
+            createConfettiAnimation(window.innerWidth/2, window.innerHeight/2);
+            closeModal('betModal');
+            
+            // Add announcement
+            addAnnouncement('bet', `${state.selectedBet} bet placed for $${state.currentStake}`);
+            
+            // Update notifications
+            state.mainNotifications += 1;
+            updateNotificationBadges();
+            
+            btn.innerHTML = original;
+            btn.disabled = false;
+            
+            // Reset
+            state.currentStake = 0;
+            state.selectedBet = null;
+        }, 1500);
+    }
+    
+    function addParlayLeg(leg, odds) {
+        const parlayLegs = document.getElementById('parlayLegs');
+        const legDiv = document.createElement('div');
+        legDiv.style.cssText = 'display:flex; justify-content:space-between; padding:10px; background:rgba(255,255,255,0.05); border-radius:6px; margin-bottom:5px;';
+        legDiv.innerHTML = `
+            <span>${leg}</span>
+            <span style="color:var(--championship-gold); font-weight:900;">${odds}</span>
+        `;
+        parlayLegs.appendChild(legDiv);
+    }
+    
+    function placeParlay() {
+        showToast('Parlay bet placed!');
+        closeModal('betModal');
+    }
+
+    function updateBetPercentages() {
+        const total = Object.values(state.bets).reduce((sum, bet) => sum + bet.amount, 0);
+        
+        Object.keys(state.bets).forEach(fighter => {
+            const bet = state.bets[fighter];
+            bet.percentage = total > 0 ? Math.round((bet.amount / total) * 100) : 0;
+        });
+        
+        // Update total pot display
+        document.getElementById('totalPot').textContent = formatNumber(state.totalPot);
+    }
+
+    function updateBetUI() {
+        // Update Paul
+        const paulBet = state.bets['JAKE PAUL'];
+        document.getElementById('betRed').textContent = paulBet.percentage + '%';
+        document.getElementById('progressRed').style.width = paulBet.percentage + '%';
+        
+        // Update Joshua
+        const joshuaBet = state.bets['ANTHONY JOSHUA'];
+        document.getElementById('betBlue').textContent = joshuaBet.percentage + '%';
+        document.getElementById('progressBlue').style.width = joshuaBet.percentage + '%';
+        
+        // Update total pot
+        document.getElementById('totalPot').textContent = formatNumber(state.totalPot);
+    }
+    
+    function updateOddsDisplay() {
+        // Simulate odds movement
+        const paulChange = getRandomInt(-10, 15);
+        const joshuaChange = getRandomInt(-15, 10);
+        
+        const paulOdds = 450 + paulChange;
+        const joshuaOdds = -650 + joshuaChange;
+        
+        document.getElementById('paulOdds').textContent = (paulOdds > 0 ? '+' : '') + paulOdds;
+        document.getElementById('joshuaOdds').textContent = joshuaOdds;
+    }
+
+    // ============ DEPOSIT & PAYMENT ============
+    function selectDeposit(amount) {
+        state.selectedDeposit = amount;
+        
+        document.querySelectorAll('.tier-option').forEach(o => o.classList.remove('selected'));
+        event.target.closest('.tier-option').classList.add('selected');
+        
+        document.getElementById('customDeposit').value = amount;
+    }
+
+    function processDeposit() {
+        let amount = state.selectedDeposit || parseFloat(document.getElementById('customDeposit').value);
+        
+        if(!amount || amount < 20) {
+            showToast('Minimum deposit is $20');
+            return;
+        }
+        
+        if(amount > 5000) {
+            showToast('Maximum deposit is $5,000');
+            return;
+        }
+        
+        openPay(amount, 'Deposit');
+        closeModal('depositModal');
+    }
+
+    function openPay(amount, description) {
+        document.getElementById('payAmount').textContent = amount;
+        document.getElementById('paymentTitle').textContent = description;
+        document.getElementById('paymentItem').textContent = '$' + amount.toFixed(2);
+        document.getElementById('paymentTotal').textContent = '$' + amount.toFixed(2);
+        
+        openModal('payModal');
+    }
+    
+    function selectPayment(method) {
+        document.querySelectorAll('.power-bet').forEach(b => b.classList.remove('selected'));
+        event.target.closest('.power-bet').classList.add('selected');
+    }
+
+    function processPayment() {
+        const btn = document.querySelector('#payModal .submit-action');
+        const original = btn.innerHTML;
+        
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING...';
+        btn.disabled = true;
+        
+        setTimeout(() => {
+            const amount = parseFloat(document.getElementById('payAmount').textContent);
+            state.user.bankroll += amount;
+            
+            showToast('Deposit successful! Bankroll updated.');
+            closeModal('payModal');
+            
+            // Add announcement
+            addAnnouncement('deposit', `New deposit: $${amount}`);
+            
+            // Update profile
+            document.querySelector('.goal-title').innerHTML = `Bankroll: $${state.user.bankroll}`;
+            
+            btn.innerHTML = original;
+            btn.disabled = false;
+            
+            // Reset
+            state.selectedDeposit = null;
+        }, 2000);
+    }
+
+    // ============ HIGH ROLLER SYSTEM ============
+    function renderHighrollerGrid() {
+        const grid = document.getElementById('highrollerGrid');
+        grid.innerHTML = '';
+        
+        state.highrollers.forEach(hr => {
+            const card = document.createElement('div');
+            card.className = 'hr-card';
+            card.onclick = () => openHighrollerModal(hr);
+            
+            card.innerHTML = `
+                <div class="hr-rank">#${hr.id}</div>
+                <div class="hr-avatar" style="background-image: ${hr.img ? `url('${hr.img}')` : 'none'};">
+                    ${!hr.img ? '<i class="fas fa-user" style="font-size:2rem; color:var(--chalk-gray); margin-top:15px;"></i>' : ''}
+                    ${hr.id === 1 ? '<div class="hr-badge"><i class="fas fa-crown"></i></div>' : ''}
+                </div>
+                <div class="hr-name">${hr.name}</div>
+                <div class="hr-stats">
+                    <span style="color:var(--tape-green);">${hr.profit}</span>
+                    <span>${hr.role}</span>
+                </div>
+                <div class="hr-tip">
+                    <i class="fas fa-lightbulb"></i> ${hr.tip}
+                </div>
+                <button class="follow-btn" onclick="event.stopPropagation(); toggleFollow(${hr.id})">
+                    ${hr.connected ? '<i class="fas fa-check"></i> FOLLOWING' : '<i class="fas fa-eye"></i> FOLLOW PICKS'}
+                </button>
+            `;
+            
+            grid.appendChild(card);
+        });
+        
+        // Update high roller count
+        const activeCount = getRandomInt(20, 30);
+        const betAmount = getRandomInt(1, 2);
+        document.getElementById('highrollerCount').textContent = `${activeCount} ACTIVE • $${betAmount}.${getRandomInt(1,9)}M IN BETS`;
+    }
+
+    function openHighrollerModal(hr) {
+        document.getElementById('pName').textContent = hr.name;
+        document.getElementById('pRole').textContent = hr.role + ' • ' + hr.profit;
+        
+        const avatar = document.getElementById('pAvatar');
+        avatar.style.backgroundImage = hr.img ? `url('${hr.img}')` : 'none';
+        avatar.innerHTML = hr.img ? '' : '<i class="fas fa-user" style="font-size:3rem; color:var(--chalk-gray); margin-top:25px;"></i>';
+        
+        document.getElementById('raisedAmount').textContent = hr.profit;
+        document.getElementById('pGoalFill').style.width = '0%';
+        
+        const followBtn = document.getElementById('connectButton');
+        followBtn.innerHTML = hr.connected ? 
+            '<i class="fas fa-check"></i> FOLLOWING' : 
+            '<i class="fas fa-eye"></i> FOLLOW PICKS';
+        followBtn.dataset.hrId = hr.id;
+        
+        openModal('profileModal');
+        
+        setTimeout(() => {
+            document.getElementById('pGoalFill').style.width = '100%';
+        }, 200);
+    }
+
+    function toggleFollow(hrId) {
+        event.stopPropagation();
+        
+        const hr = state.highrollers.find(h => h.id === hrId);
+        if(!hr) return;
+        
+        hr.connected = !hr.connected;
+        
+        if(hr.connected) {
+            state.user.connected.push(hrId);
+            showToast(`👑 Now following ${hr.name}'s picks!`);
+            
+            // Add announcement
+            addAnnouncement('follow', `You're now following ${hr.name}`);
+            
+            // Update notification
+            state.highrollerNotifications = (state.highrollerNotifications || 0) + 1;
+            updateNotificationBadges();
+        } else {
+            state.user.connected = state.user.connected.filter(id => id !== hrId);
+            showToast(`Unfollowed ${hr.name}`);
+        }
+        
+        // Update UI
+        renderHighrollerGrid();
+        
+        // Update profile modal if open
+        const followBtn = document.getElementById('connectButton');
+        if(followBtn.dataset.hrId == hrId) {
+            followBtn.innerHTML = hr.connected ? 
+                '<i class="fas fa-check"></i> FOLLOWING' : 
+                '<i class="fas fa-eye"></i> FOLLOW PICKS';
+        }
+    }
+
+    // ============ PROP BET SYSTEM ============
+    function renderPropBets() {
+        const grid = document.getElementById('propGrid');
+        grid.innerHTML = '';
+        
+        const propBets = [
+            { text: 'Paul KO Round 1-3', odds: '+350', category: 'Method', hot: true },
+            { text: 'Joshua Decision', odds: '+150', category: 'Method', hot: false },
+            { text: 'Over 7.5 Rounds', odds: '+120', category: 'Rounds', hot: true },
+            { text: 'Fight Stopped Cut', odds: '+800', category: 'Medical', hot: false }
+        ];
+        
+        propBets.forEach((prop, index) => {
+            const card = document.createElement('div');
+            card.className = 'prop-card';
+            card.onclick = () => openBetModal(prop.text, 'prop', prop.odds, index % 2 === 0 ? 'red' : 'blue');
+            
+            card.innerHTML = `
+                <div class="prop-odds">${prop.odds}</div>
+                <div class="prop-content">
+                    <div class="prop-title">${prop.text}</div>
+                    <div class="prop-meta">${prop.category} ${prop.hot ? '• 🔥 HOT' : ''}</div>
+                </div>
+            `;
+            
+            grid.appendChild(card);
+        });
+    }
+
+    function renderUserPropBets() {
+        const container = document.getElementById('propsContainer');
+        container.innerHTML = '';
+        
+        state.propBets.forEach((prop, index) => {
+            const propCard = document.createElement('div');
+            propCard.className = 'prop-card-lg';
+            
+            propCard.innerHTML = `
+                <div class="upvote-box" onclick="voteProp(${prop.id})">
+                    <i class="fas fa-chevron-up arrow ${prop.betted ? 'active' : ''}"></i>
+                    <span class="count">${prop.votes}</span>
+                </div>
+                <div>
+                    <div style="font-weight:900; font-size:1rem; margin-bottom:8px; color:white;">
+                        ${prop.text}
+                        <span style="background:var(--mat-black); color:var(--championship-gold); font-size:0.7rem; padding:2px 6px; border-radius:4px; margin-left:8px;">
+                            ${prop.odds}
+                        </span>
+                    </div>
+                    <div style="font-size:0.8rem; color:var(--chalk-gray); margin-bottom:${prop.resolved ? '10px' : '0'};">
+                        Created by <strong style="color:var(--championship-gold);">${prop.creator}</strong> • ${prop.time}
+                    </div>
+                    ${prop.resolved ? `
+                        <div style="font-size:0.8rem; color:var(--chalk-gray); background: rgba(255,255,255,0.05); padding:8px 12px; border-radius:8px;">
+                            <i class="fas fa-check-circle" style="margin-right:8px; color:var(--tape-green);"></i>
+                            <strong>Resolved:</strong> Bet settled
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            container.appendChild(propCard);
+        });
+    }
+
+    function voteProp(propId) {
+        const prop = state.propBets.find(p => p.id === propId);
+        if(!prop) return;
+        
+        if(prop.betted) {
+            prop.votes--;
+            prop.betted = false;
+        } else {
+            prop.votes++;
+            prop.betted = true;
+        }
+        
+        renderUserPropBets();
+        
+        // Add announcement for popular props
+        if(prop.votes > 50) {
+            addAnnouncement('prop', `Popular prop bet: "${prop.text.substring(0, 30)}..."`);
+        }
+    }
+
+    function createPropBet() {
+        const input = document.getElementById('propInput');
+        const text = input.value.trim();
+        const yesOdds = document.getElementById('yesOdds').value.trim();
+        const noOdds = document.getElementById('noOdds').value.trim();
+        
+        if(!text) {
+            showToast('Please enter a prop bet');
+            return;
+        }
+        
+        if(!yesOdds || !noOdds) {
+            showToast('Please set both Yes and No odds');
+            return;
+        }
+        
+        const isAnonymous = document.getElementById('anonymousCheck').checked;
+        const isPublic = document.getElementById('publicCheck').checked;
+        
+        const newProp = {
+            id: state.propBets.length + 1,
+            text: text,
+            creator: isAnonymous ? 'Anonymous' : state.user.name,
+            time: 'Just now',
+            votes: 0,
+            odds: yesOdds + '/' + noOdds,
+            betted: false,
+            resolved: false,
+            public: isPublic
+        };
+        
+        state.propBets.unshift(newProp);
+        renderUserPropBets();
+        
+        showToast('Prop bet created! Market is now live.');
+        closeModal('createPropModal');
+        
+        // Add announcement
+        addAnnouncement('prop', `New prop bet: "${text.substring(0, 40)}..."`);
+        
+        // Update notification
+        state.propsNotifications = (state.propsNotifications || 0) + 1;
+        updateNotificationBadges();
+    }
+
+    // ============ RESPONSIBLE BETTING ============
+    function setLimit(type, amount) {
+        showToast(`${type} limit set to $${amount}`);
+        closeModal('responsibleModal');
+    }
+    
+    function setTimeout(hours) {
+        showToast(`Time out set for ${hours} hours`);
+        closeModal('responsibleModal');
+    }
+    
+    function selfExclude(days) {
+        showToast(`Self exclusion set for ${days} days`);
+        closeModal('responsibleModal');
+    }
+
+    // ============ AGENDA ============
+    function renderAgenda() {
+        const agenda = [
+            { time: '7:00 PM', desc: 'Doors Open / Prelims Start', current: false },
+            { time: '8:30 PM', desc: 'Undercard Fights', current: true },
+            { time: '10:00 PM', desc: 'MAIN EVENT: Paul vs Joshua', current: true },
+            { time: '10:45 PM', desc: 'Round-by-Round Betting', current: false },
+            { time: '11:30 PM', desc: 'Post-Fight Interviews', current: false },
+            { time: '12:00 AM', desc: 'After Party & Bet Settlements', current: false }
+        ];
+        
+        const list = document.getElementById('agendaList');
+        list.innerHTML = '';
+        
+        agenda.forEach(item => {
+            const li = document.createElement('li');
+            li.className = `agenda-item ${item.current ? 'current' : ''}`;
+            
+            li.innerHTML = `
+                <span class="agenda-time">${item.time}</span> 
+                <span class="agenda-desc">
+                    ${item.desc}
+                    ${item.current ? '<span class="current-session">LIVE NOW</span>' : ''}
+                </span>
+            `;
+            
+            list.appendChild(li);
+        });
+    }
+
+    // ============ LIVE UPDATES ============
+    function startLiveUpdates() {
+        // Update live stats every 5 seconds
+        setInterval(updateLiveStats, 5000);
+        
+        // Update round timer every second
+        setInterval(updateRoundTimer, 1000);
+        
+        // Update ticker every 15 seconds
+        setInterval(updateTicker, 15000);
+        
+        // Random announcements
+        setInterval(addRandomAnnouncement, 20000);
+        
+        // Random odds fluctuations
+        setInterval(simulateOddsFluctuations, 10000);
+        
+        // Simulate bet fluctuations
+        setInterval(simulateBetFluctuations, 8000);
+    }
+
+    function updateLiveStats() {
+        // Update bettor count with small random changes
+        const bettorChange = getRandomInt(-50, 200);
+        state.liveBettors = Math.max(40000, state.liveBettors + bettorChange);
+        document.getElementById('liveBettors').textContent = formatCount(state.liveBettors);
+        
+        // Update total pot with random new bets
+        const newBets = getRandomInt(50000, 200000);
+        state.totalPot += newBets;
+        document.getElementById('totalPot').textContent = formatNumber(state.totalPot);
+        
+        // Update odds occasionally
+        if(Math.random() > 0.7) {
+            updateOddsDisplay();
+        }
+    }
+
+    function updateRoundTimer() {
+        const timer = document.getElementById('roundTimer');
+        if(!timer) return;
+        
+        const parts = timer.textContent.split(' ');
+        const round = parseInt(parts[0].replace('R', ''));
+        const timeParts = parts[1].split(':');
+        let minutes = parseInt(timeParts[0]);
+        let seconds = parseInt(timeParts[1]);
+        
+        seconds--;
+        if(seconds < 0) {
+            seconds = 59;
+            minutes--;
+            
+            if(minutes < 0) {
+                // New round
+                const newRound = round === 12 ? 1 : round + 1;
+                minutes = 2;
+                seconds = 59;
+                
+                timer.textContent = `R${newRound} ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Announce new round
+                addAnnouncement('round', `Round ${newRound} starting now!`);
+                return;
+            }
+        }
+        
+        timer.textContent = `R${round} ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function simulateOddsFluctuations() {
+        // Update odds based on random fight events
+        const events = ['Paul lands big shot', 'Joshua controls center', 'Close round', 'Cut appears'];
+        const event = events[getRandomInt(0, events.length - 1)];
+        
+        if(Math.random() > 0.5) {
+            addAnnouncement('fight', event);
+        }
+    }
+
+    function simulateBetFluctuations() {
+        // Random small bet changes
+        Object.keys(state.bets).forEach(fighter => {
+            const change = getRandomInt(-10000, 20000);
+            state.bets[fighter].amount = Math.max(0, state.bets[fighter].amount + change);
+        });
+        
+        updateBetPercentages();
+        updateBetUI();
+    }
+
+    // ============ ANNOUNCEMENTS ============
+    function updateTicker() {
+        const announcements = [
+            { icon: 'bullhorn', text: 'Welcome to SPORTS CLASH OS Live!' },
+            { icon: 'fire', text: 'Big bet placed on Paul: $25,000!' },
+            { icon: 'crown', text: 'Vegas Vince just joined High Rollers' },
+            { icon: 'lightbulb', text: 'New prop bet: Fight ends in Round 1' },
+            { icon: 'trophy', text: 'Round 5 starting in 30 seconds!' },
+            { icon: 'bolt', text: 'Live betting volume: $500K/minute' },
+            { icon: 'users', text: 'Over 45K live bettors watching' },
+            { icon: 'chart-line', text: 'Paul odds shortening to +420' }
+        ];
+        
+        const ticker = document.getElementById('announcementTicker');
+        let tickerHTML = '';
+        
+        // Show 3 random announcements
+        const shuffled = [...announcements].sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 3);
+        
+        selected.forEach(ann => {
+            tickerHTML += `<i class="fas fa-${ann.icon}"></i> ${ann.text} • `;
+        });
+        
+        ticker.innerHTML = tickerHTML;
+    }
+
+    function addRandomAnnouncement() {
+        const types = ['bet', 'fight', 'highroller', 'prop', 'general'];
+        const type = types[getRandomInt(0, types.length - 1)];
+        
+        switch(type) {
+            case 'bet':
+                const fighters = Object.keys(state.bets);
+                const fighter = fighters[getRandomInt(0, fighters.length - 1)];
+                const amount = getRandomInt(1000, 50000);
+                addAnnouncement('bet', `Big bet: $${formatCount(amount)} on ${fighter}!`);
+                break;
+            case 'highroller':
+                const names = ['Money Mike', 'Bankroll Ben', 'Oracle Olivia', 'Sharp Sam'];
+                const name = names[getRandomInt(0, names.length - 1)];
+                addAnnouncement('highroller', `${name} just placed a $10K bet`);
+                break;
+            case 'general':
+                const messages = [
+                    'Live round betting available!',
+                    'Build parlays for bigger payouts',
+                    'Create your own prop bets',
+                    'Follow top bettors for picks'
+                ];
+                const message = messages[getRandomInt(0, messages.length - 1)];
+                addAnnouncement('general', message);
+                break;
+        }
+    }
+
+    function addAnnouncement(type, text) {
+        // Update notification badges based on type
+        switch(type) {
+            case 'bet':
+                state.mainNotifications = (state.mainNotifications || 0) + 1;
+                break;
+            case 'highroller':
+                state.highrollerNotifications = (state.highrollerNotifications || 0) + 1;
+                break;
+            case 'prop':
+                state.propsNotifications = (state.propsNotifications || 0) + 1;
+                break;
+        }
+        
+        updateNotificationBadges();
+        
+        // In a real app, this would add to the ticker
+        console.log(`Announcement: ${text}`);
+    }
+
+    // ============ NOTIFICATIONS ============
+    function updateNotificationBadges() {
+        // Main event notifications
+        const mainBadge = document.getElementById('mainNotification');
+        const navMainBadge = document.getElementById('navMainBadge');
+        
+        if(state.mainNotifications > 0) {
+            mainBadge.style.display = 'block';
+            navMainBadge.style.display = 'flex';
+            navMainBadge.textContent = state.mainNotifications > 9 ? '9+' : state.mainNotifications;
+        } else {
+            mainBadge.style.display = 'none';
+            navMainBadge.style.display = 'none';
+        }
+        
+        // High roller notifications
+        const highrollerBadge = document.getElementById('highrollerNotification');
+        const navHighrollerBadge = document.getElementById('navHighrollerBadge');
+        
+        if(state.highrollerNotifications > 0) {
+            highrollerBadge.style.display = 'block';
+            navHighrollerBadge.style.display = 'flex';
+            navHighrollerBadge.textContent = state.highrollerNotifications > 9 ? '9+' : state.highrollerNotifications;
+        } else {
+            highrollerBadge.style.display = 'none';
+            navHighrollerBadge.style.display = 'none';
+        }
+        
+        // Prop bet notifications
+        const propsBadge = document.getElementById('propsNotification');
+        if(state.propsNotifications > 0) {
+            propsBadge.style.display = 'block';
+        } else {
+            propsBadge.style.display = 'none';
+        }
+    }
+
+    // ============ QUICK ACTIONS ============
+    function openQuickActions() {
+        const actions = [
+            { text: 'Quick Deposit', icon: 'wallet', action: () => openModal('depositModal') },
+            { text: 'Live Round Bet', icon: 'bolt', action: () => openBetModal('Live Round', 'round', '+200', 'gold') },
+            { text: 'Create Prop Bet', icon: 'lightbulb', action: () => openModal('createPropModal') },
+            { text: 'View Fight Card', icon: 'calendar-alt', action: () => openModal('agendaModal') }
+        ];
+        
+        // Create quick action menu
+        const menu = document.createElement('div');
+        menu.style.cssText = `
+            position: fixed;
+            bottom: 150px;
+            right: 20px;
+            background: var(--gradient-card);
+            border-radius: 16px;
+            padding: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            z-index: 199;
+            min-width: 200px;
+            border: 1px solid rgba(255,215,0,0.3);
+            backdrop-filter: blur(10px);
+        `;
+        
+        actions.forEach(action => {
+            const btn = document.createElement('div');
+            btn.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 15px;
+                cursor: pointer;
+                border-radius: 8px;
+                transition: background 0.2s;
+                color: white;
+            `;
+            btn.onmouseenter = () => btn.style.background = 'rgba(255,255,255,0.1)';
+            btn.onmouseleave = () => btn.style.background = 'transparent';
+            btn.onclick = () => {
+                action.action();
+                document.body.removeChild(menu);
+            };
+            
+            btn.innerHTML = `
+                <i class="fas fa-${action.icon}" style="color: var(--championship-gold);"></i>
+                <span style="font-weight: 600;">${action.text}</span>
+            `;
+            
+            menu.appendChild(btn);
+        });
+        
+        // Close button
+        const closeBtn = document.createElement('div');
+        closeBtn.style.cssText = `
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            color: var(--chalk-gray);
+            font-size: 0.8rem;
+            cursor: pointer;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        `;
+        closeBtn.textContent = 'Close';
+        closeBtn.onclick = () => document.body.removeChild(menu);
+        menu.appendChild(closeBtn);
+        
+        // Add to body
+        document.body.appendChild(menu);
+        
+        // Close on outside click
+        setTimeout(() => {
+            const closeOnClick = (e) => {
+                if(!menu.contains(e.target) && !e.target.closest('.quick-action-fab')) {
+                    document.body.removeChild(menu);
+                    document.removeEventListener('click', closeOnClick);
+                }
+            };
+            document.addEventListener('click', closeOnClick);
+        }, 100);
+    }
+
+    // ============ UI HELPERS ============
+    function showToast(message) {
+        // Remove existing toast
+        const existing = document.querySelector('.toast');
+        if(existing) existing.remove();
+        
+        // Create toast
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.style.cssText = `
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--championship-gold);
+            color: black;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 900;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            animation: slideDown 0.3s ease;
+        `;
+        
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.animation = 'slideUp 0.3s ease';
+            setTimeout(() => {
+                if(toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
+    }
+</script>
+</body>
+</html>

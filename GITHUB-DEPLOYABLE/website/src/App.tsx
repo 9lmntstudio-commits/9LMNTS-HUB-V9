@@ -180,6 +180,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#1A1A1A]">
       <Analytics />
+      <link href="/index.css" rel="stylesheet" />
       {!isStandalonePage && (
         <Navbar
           currentPage={currentPage}

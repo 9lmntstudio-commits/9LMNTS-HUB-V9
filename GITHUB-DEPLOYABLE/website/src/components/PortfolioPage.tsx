@@ -1,19 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import { Play, Pause, ExternalLink, ArrowRight } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { motion, useScroll, useTransform } from 'framer-motion';
-const soundClashImg1 = '/images/sound-clash-1.png';
-const soundClashImg2 = '/images/sound-clash-2.png';
-const soundClashImg3 = '/images/sound-clash-3.png';
-const weddingImg1 = '/images/wedding-1.png';
-const weddingImg2 = '/images/wedding-2.png';
-const weddingImg3 = '/images/wedding-3.png';
-const corporateImg1 = '/images/corporate-1.png';
-const corporateImg2 = '/images/corporate-2.png';
-const corporateImg3 = '/images/corporate-3.png';
-const corporateImg4 = '/images/corporate-4.png';
-const corporateImg5 = '/images/corporate-5.png';
-const corporateImg6 = '/images/corporate-6.png';
+import { motion, useScroll, useTransform } from 'motion/react';
+const soundClashImg1 = '../public/images/sound-clash-1.png';
+const soundClashImg2 = '../public/images/sound-clash-2.png';
+const soundClashImg3 = '../public/images/sound-clash-3.png';
+const weddingImg1 = '../public/images/wedding-1.png';
+const weddingImg2 = '../public/images/wedding-2.png';
+const weddingImg3 = '../public/images/wedding-3.png';
+const corporateImg1 = '../public/images/corporate-1.png';
+const corporateImg2 = '../public/images/corporate-2.png';
+const corporateImg3 = '../public/images/corporate-3.png';
+const corporateImg4 = '../public/images/corporate-4.png';
+const corporateImg5 = '../public/images/corporate-5.png';
+const corporateImg6 = '../public/images/corporate-6.png';
 
 interface PortfolioPageProps {
   onNavigate: (page: string) => void;

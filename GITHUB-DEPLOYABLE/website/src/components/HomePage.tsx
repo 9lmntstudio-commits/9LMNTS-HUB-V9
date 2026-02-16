@@ -1,8 +1,7 @@
 import { ArrowRight, Sparkles, Zap, Layers } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
-import soundClashImg from '/images/sound-clash-1.png';
-import weddingImg from '/images/wedding-1.png';
-import corporateImg from '/images/corporate-1.png';
+import soundClashImg from '../public/images/sound-clash-1.png';
+import weddingImg from '../public/images/wedding-1.png';
+import corporateImg from '../public/images/corporate-1.png';
 
 interface HomePageProps {
   onNavigate: (page: string, plan?: string) => void;
@@ -51,7 +50,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen" style={{backgroundColor: 'var(--background)'}}>
       {/* Modern Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Modern Background Effects */}
@@ -96,13 +95,13 @@ export function HomePage({ onNavigate }: HomePageProps) {
       </section>
 
       {/* 9 Elements Concept */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0D0D0D]">
+      <section className="py-20 px-4 sm:px-6 lg:px-8" style={{backgroundColor: 'var(--card)'}}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-5xl text-white mb-4">
-              The <span className="font-futuristic">9LMNTS</span> <span className="font-graffiti text-[#FF7A00]">Concept</span>
+              The <span className="font-futuristic">9LMNTS</span> <span className="font-graffiti" style={{color: 'var(--primary)'}}>Concept</span>
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto" style={{color: 'var(--muted-foreground)'}}>
               Just like the 9 elements of Hip-Hop culture, we bring together 
               diverse creative pillars to craft your digital presence
             </p>
@@ -174,9 +173,9 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-5xl text-white mb-4">
-              <span className="font-futuristic">Featured</span> <span className="font-graffiti text-[#FF7A00]">Work</span>
+              The <span className="font-futuristic">Featured</span> <span className="font-graffiti" style={{color: 'var(--primary)'}}>Work</span>
             </h2>
-            <p className="text-gray-400 text-lg">
+            <p className="text-gray-400 text-lg" style={{color: 'var(--muted-foreground)'}}>
               Explore our latest digital masterpieces
             </p>
           </div>
@@ -189,7 +188,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
                 className="group cursor-pointer"
               >
                 <div className="relative overflow-hidden rounded-lg mb-4 aspect-[4/3] bg-[#222222]">
-                  <ImageWithFallback
+                  <img
                     src={work.image as unknown as string}
                     alt={work.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -216,15 +215,14 @@ export function HomePage({ onNavigate }: HomePageProps) {
           </div>
         </div>
       </section>
-
       {/* Pricing Teaser */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#0D0D0D]">
+      <section className="py-20 px-4 sm:px-6 lg:px-8" style={{backgroundColor: 'var(--card)'}}>
         <div className="max-w-6xl mx-auto text-center">
           <div className="mb-16">
             <h2 className="text-3xl sm:text-5xl text-white mb-4">
-              <span className="font-futuristic">Choose Your</span> <span className="font-graffiti text-[#FF7A00]">Element</span>
+              The <span className="font-futuristic">Choose Your</span> <span className="font-graffiti" style={{color: 'var(--primary)'}}>Element</span>
             </h2>
-            <p className="text-gray-400 text-lg">
+            <p className="text-gray-400 text-lg" style={{color: 'var(--muted-foreground)'}}>
               Flexible pricing for every stage of your journey
             </p>
           </div>

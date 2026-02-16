@@ -44,3 +44,20 @@ next-env.d.ts
 /supabase/
 
 .env*.local
+
+# Build artifacts
+deploy/
+.vercel/
+
+# Backup versions
+website-backup/
+
+# Development tools
+automation/
+loa-core/
+
+# GitHub workflows
+.github/
+
+# Local environment
+.env.local
